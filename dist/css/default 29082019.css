@@ -1,0 +1,361 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+    min-width: 320px;
+    background: #FFFFFF;
+    font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.4285em;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+/*
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+*/
+
+html, body {
+    height: 100%;
+}
+
+.mayuscula{
+    text-transform:uppercase!important;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.searchtext {
+    width: 30em;
+}
+
+.page-footer {
+    padding-top: 0px;
+}
+.page-footer .footer-copyright {
+    min-height: 10px;
+    font-size: 13px;
+}
+#infoMessage {
+  color: red;
+  margin: 10px 0 10px;
+}
+
+#infoMessage p {
+  margin: 2px;  
+}
+
+.main.container {
+    margin-top: 4.5em;
+}
+
+.navy {
+    background: #1a237e!important;
+}
+
+.turquesa {
+    background: #00B1E1!important;
+}
+
+.step.hidden {
+    display: none;
+}
+
+.fields.hidden {
+    display: none!important;
+}
+
+.container.hidden {
+    display: none!important;
+}
+
+.menu.vertical {
+    left: 0!important;
+}
+
+
+.ui.inverted.menu .dropdown.item:hover, .ui.inverted.menu .link.item:hover, .ui.inverted.menu a.item:hover, .ui.link.inverted.menu .item:hover {
+    background-color: rgba(0,0,0,.1)!important;
+    color: #fff;
+}
+
+
+
+.row.hidden {
+    display: none!important;    
+}
+
+.ui.segment {
+    margin: 0.5rem 0!important;
+}
+
+ .main.container.top {
+     margin-top: 2.0em!important;
+ }
+.step.active {
+   background: aliceblue!important;
+}
+
+
+.vertical.menu.letra {
+    font-size: 0.9rem!important;
+}
+
+.styleNo {
+    width: 60px!important;
+}
+
+.totalxpagar {
+    font-size: 20px!important;
+    color: orange!important;
+    width: 14rem!important;
+    text-align-last:right!important;
+
+}
+
+.table-input {
+    text-align-last:right!important;
+    border: 0px solid rgba(34,36,38,.15)!important;
+    padding: .5em .5em!important;
+}
+
+.hidden {
+    display: none!important; 
+}
+
+
+.ui.inverted.menu.teal .item, .ui.inverted.menu .item>a:not(.ui){
+    color: black!important;
+}
+
+
+.ui.inverted.menu.teal .item{
+    color:#DEDEDE;    
+}
+
+
+.ui.inverted.menu.yellow .item, .ui.inverted.menu .item>a:not(.ui){
+    color: darkslategrey!important;
+}
+
+.ui.inverted.menu .yellow.active.item, .ui.inverted.yellow.menu {
+    background-color: #EDCC49!important
+}
+
+
+.ui.vertical.menu.fluid.ancho {
+    width: 215px!important;
+    font-size: 1.2em;
+}
+
+.ui.vertical.text.menu .item {
+    text-align: left;
+    padding: 8px!important;
+}
+
+.text-right {
+    text-align: right!important;
+}
+
+
+.text-center {
+    text-align: center!important;
+}
+
+.div-ahorros {
+    position: absolute;
+    width: 80%;
+    float: right;
+    z-index: 100;
+    top: 17rem;
+    background-color: white;
+    padding: 0.9rem; 
+    font-size: 0.90rem;
+    text-align: justify;
+    transition: all 0.3s;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12), 0 2px 10px 0 rgba(34,36,38,.15);
+    border: 1px solid #d4d4d5;   
+    left: 10rem; 
+}
+
+.ui.rojo.header {
+    color: rgb(231, 76, 60)!important;
+}
+.ui.rojo {
+    color: rgb(231, 76, 60)!important;    
+}
+
+.ui.message {
+    border-radius: 5px!important;
+    width: 65%;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed!important;
+    z-index: 200;
+    top: 35px;
+    transition: all .5s ease;
+}
+
+.ui.message.message2 {
+    border-radius: 5px!important;
+    width: 81rem;
+    margin-left: auto;
+    margin-right: auto;
+    position: fixed!important;
+    z-index: 200;
+    top: 35px;
+    transition: all .5s ease;
+}
+
+
+
+.ui.message >.close.icon {
+    top: 5px;
+    transition: color .3s ease;
+}
+
+.ui.positive.message {
+    background-color: #4CAF50!important;
+    color: white!important;
+}
+
+.ui.negative.message {
+    background-color: #e74c3c!important;
+    color: white!important;
+}
+
+.disablediv {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.main.container {
+    margin-top: 2.0em;
+/*    margin-left: 0.5em!important;*/
+}
+
+.thirteen.wide.column {
+    margin-top: 1em;
+}
+
+#mainleft {
+  margin-top: 49px!important;
+  z-index: 1001;
+}
+
+.pushablenew>.pusher:after {
+    position: fixed;
+    top: 0;
+    right: 0;
+    content: '';
+    background-color: rgba(0,0,0,.4);
+    overflow: hidden;
+    opacity: 0;
+    -webkit-transition: opacity .5s;
+    transition: opacity .5s;
+    will-change: opacity;
+    z-index: 1000;
+}
+
+.pushablenew>.pusher.dimmednew:after {
+    width: 100%!important;
+    height: 100%!important;
+    opacity: 1!important;
+}
+
+.ui.dimmer {
+    background-color: rgba(0,0,0,.5)!important;    
+}
+
+
+
+.box-emergente {
+    position: absolute!important;
+    width: 100%;
+    z-index: 200;
+    background-color: #f3f6f9;
+    padding: 1rem;    
+    box-shadow: 0px 10px 20px -3px rgba(40,40,40,0.4)
+}
+
+.box-fixed-emergente {
+    position: fixed!important;
+    width: 80%;
+    z-index: 200;
+    background-color: #f3f6f9;
+    padding: 1rem;    
+    box-shadow: 0px 10px 20px -3px rgba(40,40,40,0.4)
+}
+
+
+
+.customTr{
+    background: #f9fafb;
+    border-bottom: 1px solid rgba(34,36,38,.1)!important;
+}
+
+
+
+.customFontT {
+   font-size: 0.85rem!important;
+}
+
+
+@media only screen and (min-width: 1200px)
+{
+.ui.mini.modal {
+    width: 360px;
+    margin: 0 0 0 -180px;
+}
+}
+@media only screen and (min-width: 992px)
+{
+.ui.mini.modal {
+    width: 340px;
+    margin: 0 0 0 -170px;
+}
+}
+@media only screen and (min-width: 768px)
+{
+.ui.mini.modal {
+    width: 35.2%;
+    margin: 0 0 0 -17.6%;
+}
+}
+
+
+@media only screen and (min-width: 1200px)
+{
+.ui.tiny.modal {
+    width: 540px;
+    margin: 0 0 0 -270px;
+}
+}
+@media only screen and (min-width: 992px)
+{
+.ui.tiny.modal {
+    width: 510px;
+    margin: 0 0 0 -255px;
+}
+}
+@media only screen and (min-width: 768px)
+{
+.ui.tiny.modal {
+    width: 52.8%;
+    margin: 0 0 0 -26.4%;
+}
+}
+/*
+@media only screen and (min-width: 1200px)
+{
+.ui.container {
+    width: 1100px!important;
+}
+}
+*/

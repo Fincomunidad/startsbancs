@@ -1,0 +1,1 @@
+<p>Bienvenido al módulo catalogos</p>
