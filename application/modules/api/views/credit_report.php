@@ -1027,7 +1027,7 @@ function generateCreditosActivosTable($title, $data, $esquema)
     $htmlInit = '<br><br><table style="width:100%" align="center">';
     $htmlInit .= '  <tr>';
     foreach ($title as $value) {
-        $htmlInit .= '    <th>' . $value . '</th>';
+        $htmlInit .= '    <th>' . htmlspecialchars($value) . '</th>';
     }
     $htmlInit .= '  </tr>';
 
@@ -1045,22 +1045,22 @@ function generateCreditosActivosTable($title, $data, $esquema)
         }
 
         $html .= '  <tr>';
-        $html .= '  <td style="width:5px;">' . $contador . '</td>';
-        $html .= '  <td style="width:3px;">' . $value['idsucursal'] . '</td>';
-        $html .= '  <td style="width:3px;">' . $value['idcredito'] . '</td>';
-        $html .= '  <td style="width:45px;">' . $value['fecha_dispersa'] . '</td>';
-        $html .= '  <td style="width:100px; text-align: left; padding-left: 8px; padding-right: 7px">' . $value['idacreditado'] . ' - ' . $value['nombre'] . '</td>';
-        $html .= '  <td style="width:5px;">' . $value['nivel'] . '</td>';
-        $html .= '  <td style="width:40px;">' . formatNumber($value['monto']) . '</td>';
-        $html .= '  <td style="width:5px;">' . $value['num_pagos'] . '</td>';
+        $html .= '  <td style="width:5px;">' . htmlspecialchars($contador) . '</td>';
+        $html .= '  <td style="width:3px;">' . htmlspecialchars($value['idsucursal']) . '</td>';
+        $html .= '  <td style="width:3px;">' . htmlspecialchars($value['idcredito']) . '</td>';
+        $html .= '  <td style="width:45px;">' . htmlspecialchars($value['fecha_dispersa']) . '</td>';
+        $html .= '  <td class="text-left" style="width:100px;">' . htmlspecialchars($value['idacreditado']) . ' - ' . htmlspecialchars($value['nombre']) . '</td>';
+        $html .= '  <td style="width:5px;">' . htmlspecialchars($value['nivel']) . '</td>';
+        $html .= '  <td style="width:40px;">' . htmlspecialchars(formatNumber($value['monto'])) . '</td>';
+        $html .= '  <td style="width:5px;">' . htmlspecialchars($value['num_pagos']) . '</td>';
 
         if ($esquema == 'ama.') {
-            $html .= '  <td style="width:5px;">' . $value['periodo'] . '</td>';
+            $html .= '  <td style="width:5px;">' . htmlspecialchars($value['periodo']) . '</td>';
         }
         
-        $html .= '  <td style="width:3px;">' . $value['grupo_numero'] . '</td>';
-        $html .= '  <td style="width:80px; text-align: left; padding-left: 8px;">' . $value['col_numero'] . ' - ' . $value['col_nombre'] . '</td>';
-        $html .= '  <td style="width:80px;">' . $value['promotor'] . '</td>';
+        $html .= '  <td style="width:3px;">' . htmlspecialchars($value['grupo_numero']) . '</td>';
+        $html .= '  <td class="text-left" style="width:80px;">' . htmlspecialchars($value['col_numero']) . ' - ' . htmlspecialchars($value['col_nombre']) . '</td>';
+        $html .= '  <td style="width:80px;">' . htmlspecialchars($value['promotor']) . '</td>';
         $html .= '  </tr>';
         $contador++;
     }
@@ -1068,3 +1068,4 @@ function generateCreditosActivosTable($title, $data, $esquema)
     $html .= '</table>';
     return $html;
 }
+

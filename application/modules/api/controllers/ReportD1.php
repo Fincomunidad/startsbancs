@@ -390,18 +390,31 @@ class ReportD1 extends CarteraD1
 			$html = generateHead(
 				'Créditos Activos',
 				'
-			table {
-				font-size: 12px;
-			}
-			th {
-				padding: 5px 0;
-				height: 15px;
-				text-align: center;
-			}
-			td {
-				text-align: center;
-				padding: 6px 5px;
-			}
+				table {
+					font-size: 12px;
+					width: 100%;
+					border-collapse: collapse;
+					font-family: Arial, sans-serif;
+					margin: 20px 0;
+				}
+				th, td {
+					padding: 4px; /* Reduced padding */
+				}
+				th {
+					text-align: center;
+					height: 15px;
+				}
+				td {
+					text-align: center;
+				}
+				tr:hover {
+					background-color: #f1f1f1;
+				}
+				.text-left {
+					text-align: left;
+					padding-left: 6px; 
+					padding-right: 6px; 
+				}
 			'
 			);
 			$html .= generateSimpleHeader(getEmpresa($this->esquema));
@@ -3495,61 +3508,94 @@ class ReportD1 extends CarteraD1
 		return $html;
 	}
 
-	// REFACTORIZACION REPORTE DE CRÉDITOS ACTIVOS POR SUCURSAL
+// CRÉDITOS ACTIVOS POR SUCURSALES
+	/**
+	 * Genera un informe en formato PDF con los créditos activos de la sucursal en la que se escuentre seleccionada.
+	 * 
+	 * @return void
+	 */
 	public function pdf_credactivos_get()
-	{
-		$dbQueries = new DatabaseQueries($this->base, $this->esquema);
-		$esquema = $this->session->userdata('esquema');
+{
+    try {
+        $dbQueries = new DatabaseQueries($this->base, $this->esquema);
+        $esquema = $this->session->userdata('esquema');
 
-		$idNivel = $this->uri->segment(4);
+        $idNivel = $this->uri->segment(4);
 
-		if ($idNivel > 0) {
-			$title = 'NIVEL ' . $idNivel;
-		} else {
-			$title = 'TODOS LOS NIVELES';
-		}
+        if ($idNivel > 0) {
+            $title = 'NIVEL ' . $idNivel;
+        } else {
+            $title = 'TODOS LOS NIVELES';
+        }
 
-		$idsucursal = $this->session->userdata('sucursal_id');
-		$sucursal = $dbQueries->getSucursal($idsucursal);
-		$sucursalNombre = mb_strtoupper($sucursal['nombre']);
+        $idsucursal = $this->session->userdata('sucursal_id');
+        $sucursal = $dbQueries->getSucursal($idsucursal);
+        $sucursalNombre = mb_strtoupper($sucursal['nombre']);
 
-		$creditosActivosData = $dbQueries->getCreditosActivos($idNivel, $idsucursal);
+        $creditosActivosData = $dbQueries->getCreditosActivos($idNivel, $idsucursal);
 
-		$headers = array("No.", "Suc.", "Crédito", "Fecha Entrega", "Socia", "Nivel", "Monto", "No. Pagos", "Grupo", "Colmena", "Promotor");
+        // Definir títulos de columnas dependiendo del esquema
+		if ($this->esquema == 'ama.') {
+            $headers = array("No.", "Suc.", "Crédito", "Fecha Entrega", "Socia", "Nivel", "Monto", "No. Pagos", "Periodo", "Grupo", "Colmena", "Promotor");
+        } else {
+            $headers = array("No.", "Suc.", "Crédito", "Fecha Entrega", "Socia", "Nivel", "Monto", "No. Pagos", "Grupo", "Colmena", "Promotor");
+        }
 
-		if ($creditosActivosData) {
-			$tabla = tableCreditosActivos($headers, $creditosActivosData);
-		}
+        // Llamamos a la función para generar la tabla HTML
+        $tabla = generateCreditosActivosTable(
+            $headers,
+            $creditosActivosData,
+            $this->esquema
+        );
 
-		$head = generateHead(
-			'Créditos Activos',
-			'
-		table {
-			font-size: 10px;
-		}
-		th {
-			padding: 3px 0;
-			height: 15px;
-			text-align: center;
-		}
-		td {
-			text-align: center;
-			padding: 2px 0;
-		}
-		'
-		);
-		$html = $head;
-		$html .= generateSimpleHeader(getEmpresa($esquema));
-		$html .= '<h3 align="center">REPORTE DE CRÉDITOS ACTIVOS - SUCURSAL ' . $sucursalNombre . ' </h3>';
-		$html .= '<h3 align="center">' . $title . ' </h3>';
-		$html .= $tabla;
-		$html .= htmlEnd();
+        // Generamos el HTML con el diseño proporcionado
+        $html = generateHead(
+            'Créditos Activos',
+            '
+            table {
+                font-size: 12px;
+                width: 100%;
+                border-collapse: collapse;
+                font-family: Arial, sans-serif;
+                margin: 20px 0;
+            }
+            th, td {
+                padding: 4px; /* Reduced padding */
+            }
+            th {
+                text-align: center;
+                height: 15px;
+            }
+            td {
+                text-align: center;
+            }
+            tr:hover {
+                background-color: #f1f1f1;
+            }
+            .text-left {
+                text-align: left;
+                padding-left: 6px; 
+                padding-right: 6px; 
+            }
+            '
+        );
 
-		print_r($html);
-		die();
-	}
+        $html .= generateSimpleHeader(getEmpresa($this->esquema));
+        $html .= "<h3 align='center'>REPORTE GLOBAL DE CRÉDITOS ACTIVOS $title</h3>";
+		$html .= "<h3 align='center'>Sucursal $idsucursal</h3>";
+        $html .= $tabla;
+        $html .= htmlEnd();
 
+        // Imprimir HTML y detener la ejecución
+        print_r($html);
+        die();
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
 
+		
+	
 	/**
 	 * Genera un informe en formato PDF con los niveles de crédito.
 	 *  
