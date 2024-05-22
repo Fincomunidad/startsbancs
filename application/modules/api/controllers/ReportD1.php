@@ -358,7 +358,7 @@ class ReportD1 extends CarteraD1
 		}
 	}
 
-// CRÉDITOS ACTIVOS EN TODAS LAS SUCURSALES
+	// CRÉDITOS ACTIVOS EN TODAS LAS SUCURSALES
 	/**
 	 * Genera un informe en formato PDF con los créditos activos de todas las sucursales.
 	 * 
@@ -3084,33 +3084,42 @@ class ReportD1 extends CarteraD1
 		if ($this->session->userdata('sucursal_id') === '02') {
 			$sucursal = 'OAXACA';
 		}
-		if ($this->session->userdata('esquema') === "fin.") {
+
+		$esquema = $this->session->userdata('esquema');
+		$empresa = '';
+		if ($esquema === "fin.") {
 			$empresa = 'F';
-		} elseif ($this->session->userdata('esquema') === "ban.") {
+		} elseif ($esquema === "ban.") {
 			$empresa = 'B';
-		} elseif ($this->session->userdata('esquema') === "imp.") {
+		} elseif ($esquema === "imp.") {
 			$empresa = 'I';
-		} else {
-			$empresa = '';
 		}
-		$hora = $this->base->querySelect("SELECT numero, nombre, ruta, hora, lunes, martes, miercoles, jueves, viernes, sabado 
-											FROM col.get_colmena_horario_cap('" . $this->session->userdata('sucursal_id') . "', '" . $empresa . "'," . $idPromotor . ") WHERE numero>1;", TRUE);
-		$title = array("Ruta", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado");
+
+		$sql = "SELECT numero, nombre, ruta, hora, lunes, martes, miercoles, jueves, viernes, sabado 
+				FROM col.get_colmena_horario_cap('" . $this->session->userdata('sucursal_id') . "', '" . $empresa . "', " . $idPromotor . ") 
+				WHERE numero > 1;";
+		log_message('error', 'SQL Query: ' . $sql);
+
+		$hora = $this->base->querySelect($sql, TRUE);
+
+		if ($hora === FALSE) {
+			log_message('error', 'Error executing query: ' . $this->db->last_query());
+			show_error('Database query failed', 500);
+			return;
+		}
+
+		$title = array("Ruta", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
 		$tabla = '';
-		if ($hora) {
+		if (!empty($hora)) {
 			$tabla .= $this->table_col_horario($title, $hora, '0');
 		}
+
 		$header = $this->headerReport('');
-		$html = $header;
 		$html = $header . '
 			<div style="font-size:11px;">
 			<h3 align="center">HORARIO SUCURSAL: ' . $sucursal . ' </h3>';
-		$html .= '<div style="font-size:8px;">';
-		$html .= $tabla;
-		$html .= '</div>';
-		$html .= '<br><br>';
-
-		$html .= htmlEnd();
+		$html .= '<div style="font-size:8px;">' . $tabla . '</div>';
+		$html .= '<br><br>' . htmlEnd();
 
 		renderPDF($html, 'Report', true, 'letter', 'landscape');
 	}
@@ -3150,44 +3159,57 @@ class ReportD1 extends CarteraD1
 
 	public function table_col_horario($title, $data, $global)
 	{
-		if ($global === '1') {
-			$columnas = 4;
-		} else {
-			$columnas = 3;
+		$html = '<table style="width:100%; border-collapse: collapse; font-size: 10px;">';
+		$html .= '  <tr style="height:20px; background:lightblue; text-align: center;">';
+		$html .= '    <th style="border: 1px solid #000; padding: 5px;">RUTA</th>';
+		
+		$dias = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+		$dias_contenido = [];
+	
+		// Determinar qué días tienen contenido
+		foreach ($data as $value) {
+			foreach ($dias as $dia) {
+				if (!empty($value[$dia]) && !in_array($dia, $dias_contenido)) {
+					$dias_contenido[] = $dia;
+				}
+			}
 		}
-		$html = '';
-		$html .= '<table style="width:100%" >';
-		$html .= '  <tr style="height:20px; background:lightblue;">';
-		$html .= '    <th span=2>RUTA</th>';
-		$html .= '    <th colspan="' . $columnas . '" align="center">LUNES</th>';
-		$html .= '    <th colspan="' . $columnas . '" align="center">MARTES</th>';
-		$html .= '    <th colspan="' . $columnas . '" align="center">MIERCOLES</th>';
-		$html .= '    <th colspan="' . $columnas . '" align="center">JUEVES</th>';
-		$html .= '    <th colspan="' . $columnas . '" align="center">VIERNES</th>';
+	
+		// Generar encabezado solo con los días que tienen contenido
+		foreach ($dias_contenido as $dia) {
+			$html .= '    <th style="border: 1px solid #000; padding: 5px;">' . strtoupper($dia) . '</th>';
+		}
 		$html .= '  </tr>';
-		$capital = 0;
+	
 		$numero = 0;
-		$fila = '';
-		foreach ($data as $key => $value) {
-			$html .= '  <tr">';
+		foreach ($data as $value) {
+			$html .= '  <tr>';
 			if ($numero != $value['numero']) {
 				$numero = $value['numero'];
-				$html .= '  <td style="border-bottom:0px;"><b>' . $value['nombre'] . '</b></td>';
-				$fila = '1';
+				$html .= '  <td style="border: 1px solid #000; padding: 5px; vertical-align: top;"><b>' . $value['nombre'] . '</b></td>';
 			} else {
-				$html .= '  <td style="border-bottom:0px; border-top:0px;"></td>';
-				$fila = '';
+				$html .= '  <td style="border: 1px solid #000; border-top: 0px; padding: 5px; vertical-align: top;"></td>';
 			}
-			$html .= $this->col_horario_dia($value['lunes'], $fila, $global);
-			$html .= $this->col_horario_dia($value['martes'], $fila, $global);
-			$html .= $this->col_horario_dia($value['miercoles'], $fila, $global);
-			$html .= $this->col_horario_dia($value['jueves'], $fila, $global);
-			$html .= $this->col_horario_dia($value['viernes'], $fila, $global);
+			foreach ($dias_contenido as $dia) {
+				$dia_lower = strtolower($dia);
+				$html .= $this->col_horario_dia1($value[$dia_lower]);
+			}
 			$html .= '  </tr>';
 		}
+	
 		$html .= '</table>';
 		return $html;
 	}
+	
+	public function col_horario_dia1($value)
+	{
+		if (!empty($value)) {
+			$formatted_value = str_replace('|', '<br>', $value); // Reemplaza los caracteres de tubería con saltos de línea
+			return '<td style="border: 1px solid #000; padding: 5px; vertical-align: top;">' . $formatted_value . '</td>';
+		}
+		return '<td style="border: 1px solid #000; padding: 5px; vertical-align: top;"></td>'; // Celda vacía con borde
+	}
+		
 
 	public function table_col_horario2($title, $data, $global)
 	{
@@ -3508,50 +3530,50 @@ class ReportD1 extends CarteraD1
 		return $html;
 	}
 
-// CRÉDITOS ACTIVOS POR SUCURSALES
+	// CRÉDITOS ACTIVOS POR SUCURSALES
 	/**
 	 * Genera un informe en formato PDF con los créditos activos de la sucursal en la que se escuentre seleccionada.
 	 * 
 	 * @return void
 	 */
 	public function pdf_credactivos_get()
-{
-    try {
-        $dbQueries = new DatabaseQueries($this->base, $this->esquema);
-        $esquema = $this->session->userdata('esquema');
+	{
+		try {
+			$dbQueries = new DatabaseQueries($this->base, $this->esquema);
+			$esquema = $this->session->userdata('esquema');
 
-        $idNivel = $this->uri->segment(4);
+			$idNivel = $this->uri->segment(4);
 
-        if ($idNivel > 0) {
-            $title = 'NIVEL ' . $idNivel;
-        } else {
-            $title = 'TODOS LOS NIVELES';
-        }
+			if ($idNivel > 0) {
+				$title = 'NIVEL ' . $idNivel;
+			} else {
+				$title = 'TODOS LOS NIVELES';
+			}
 
-        $idsucursal = $this->session->userdata('sucursal_id');
-        $sucursal = $dbQueries->getSucursal($idsucursal);
-        $sucursalNombre = mb_strtoupper($sucursal['nombre']);
+			$idsucursal = $this->session->userdata('sucursal_id');
+			$sucursal = $dbQueries->getSucursal($idsucursal);
+			$sucursalNombre = mb_strtoupper($sucursal['nombre']);
 
-        $creditosActivosData = $dbQueries->getCreditosActivos($idNivel, $idsucursal);
+			$creditosActivosData = $dbQueries->getCreditosActivos($idNivel, $idsucursal);
 
-        // Definir títulos de columnas dependiendo del esquema
-		if ($this->esquema == 'ama.') {
-            $headers = array("No.", "Suc.", "Crédito", "Fecha Entrega", "Socia", "Nivel", "Monto", "No. Pagos", "Periodo", "Grupo", "Colmena", "Promotor");
-        } else {
-            $headers = array("No.", "Suc.", "Crédito", "Fecha Entrega", "Socia", "Nivel", "Monto", "No. Pagos", "Grupo", "Colmena", "Promotor");
-        }
+			// Definir títulos de columnas dependiendo del esquema
+			if ($this->esquema == 'ama.') {
+				$headers = array("No.", "Suc.", "Crédito", "Fecha Entrega", "Socia", "Nivel", "Monto", "No. Pagos", "Periodo", "Grupo", "Colmena", "Promotor");
+			} else {
+				$headers = array("No.", "Suc.", "Crédito", "Fecha Entrega", "Socia", "Nivel", "Monto", "No. Pagos", "Grupo", "Colmena", "Promotor");
+			}
 
-        // Llamamos a la función para generar la tabla HTML
-        $tabla = generateCreditosActivosTable(
-            $headers,
-            $creditosActivosData,
-            $this->esquema
-        );
+			// Llamamos a la función para generar la tabla HTML
+			$tabla = generateCreditosActivosTable(
+				$headers,
+				$creditosActivosData,
+				$this->esquema
+			);
 
-        // Generamos el HTML con el diseño proporcionado
-        $html = generateHead(
-            'Créditos Activos',
-            '
+			// Generamos el HTML con el diseño proporcionado
+			$html = generateHead(
+				'Créditos Activos',
+				'
             table {
                 font-size: 12px;
                 width: 100%;
@@ -3578,21 +3600,21 @@ class ReportD1 extends CarteraD1
                 padding-right: 6px; 
             }
             '
-        );
+			);
 
-        $html .= generateSimpleHeader(getEmpresa($this->esquema));
-        $html .= "<h3 align='center'>REPORTE GLOBAL DE CRÉDITOS ACTIVOS $title</h3>";
-		$html .= "<h3 align='center'>Sucursal $idsucursal</h3>";
-        $html .= $tabla;
-        $html .= htmlEnd();
+			$html .= generateSimpleHeader(getEmpresa($this->esquema));
+			$html .= "<h3 align='center'>REPORTE GLOBAL DE CRÉDITOS ACTIVOS $title</h3>";
+			$html .= "<h3 align='center'>Sucursal $idsucursal</h3>";
+			$html .= $tabla;
+			$html .= htmlEnd();
 
-        // Imprimir HTML y detener la ejecución
-        print_r($html);
-        die();
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
-    }
-}
+			// Imprimir HTML y detener la ejecución
+			print_r($html);
+			die();
+		} catch (Exception $e) {
+			echo "Error: " . $e->getMessage();
+		}
+	}
 
 	/**
 	 * Genera un informe en formato PDF con los niveles de crédito.
