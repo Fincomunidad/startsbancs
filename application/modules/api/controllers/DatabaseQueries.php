@@ -379,6 +379,41 @@ class DatabaseQueries
         return $this->base->querySelect($query, TRUE);
     }
 
+/**
+ * Obtiene los datos de los aportes sociales, filtrando por fechas y tipo de movimiento.
+ *
+ * @param string $fecini Fecha de inicio en formato 'Y-m-d'.
+ * @param string $fecfin Fecha de fin en formato 'Y-m-d'.
+ * @param string $tipo El tipo de movimiento ('D' para ingresos, 'R' para retiros).
+ * @return array Los datos de los aportes sociales.
+ */
+public function getAportesSociales($fecini, $fecfin, $tipo)
+{
+    $conditions = array();
+
+    if (!empty($fecini) && !empty($fecfin)) {
+        $conditions[] = "b.fecha::date >= '" . $fecini . "' AND b.fecha::date <= '" . $fecfin . "'";
+    }
+
+    if (!empty($tipo)) {
+        $conditions[] = "b.movimiento = '" . $tipo . "'";
+    }
+
+    $whereClause = (!empty($conditions)) ? "WHERE " . implode(" AND ", $conditions) : "";
+
+    $query = "SELECT a.idacreditado, a1.acreditado, b.fecha, 
+                CASE WHEN b.movimiento = 'D' THEN b.importe ELSE 0 END AS ingreso, 
+                CASE WHEN b.movimiento = 'R' THEN b.importe ELSE 0 END AS retiro 
+            FROM fin.aporta_soc_p AS a 
+            JOIN fin.aporta_social AS b ON b.idacreditado = a.idacreditado 
+            JOIN public.get_acreditados AS a1 ON a1.acreditadoid = a.idacreditado 
+            $whereClause
+            ORDER BY b.fecha";
+
+    return $this->base->querySelect($query, true);
+}
+
+
 
     public function getEmisionCreditosYear($idsucursal, $fechaInicio, $fechaFin, $esquema)
     {

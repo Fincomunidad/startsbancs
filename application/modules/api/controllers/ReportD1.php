@@ -3594,8 +3594,6 @@ class ReportD1 extends CarteraD1
     }
 }
 
-		
-	
 	/**
 	 * Genera un informe en formato PDF con los niveles de crédito.
 	 *  
