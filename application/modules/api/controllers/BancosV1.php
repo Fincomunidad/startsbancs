@@ -1,27 +1,23 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-// require_once(APPPATH.'/modules/api/controllers/BaseV1.php');
-require_once(APPPATH.'/modules/api/controllers/Base_Controller.php');
-class BancosV1 extends Base_Controller {
-	public function __construct() {
-        parent::__construct();
+require_once(APPPATH.'/modules/api/controllers/BaseV1.php');
+class BancosV1 extends BaseV1 {
+	public function __construct()
+    {
+		parent::__construct();
+//		if(!$this->ion_auth->logged_in())
+//		{
+//			redirect('auth','refresh');
+//		}
+		$this->methods['user_get']['limit']= 500;
+		$this->methods['user_post']['limit']= 100;
+		$this->methods['user_delete']['limit']= 50;
+		$this->load->model('base_model','base');
+		$this->load->helper('general');
+            $this->load->library('form_validation');		
+//		$this->load->helper(array('form','template'));
+            $this->esquema = $this->session->userdata('esquema')==""?'fin.': $this->session->userdata('esquema');
     }
-// 	public function __construct()
-//     {
-// 		parent::__construct();
-// //		if(!$this->ion_auth->logged_in())
-// //		{
-// //			redirect('auth','refresh');
-// //		}
-// 		$this->methods['user_get']['limit']= 500;
-// 		$this->methods['user_post']['limit']= 100;
-// 		$this->methods['user_delete']['limit']= 50;
-// 		$this->load->model('base_model','base');
-// 		$this->load->helper('general');
-//             $this->load->library('form_validation');		
-// //		$this->load->helper(array('form','template'));
-//             $this->esquema = $this->session->userdata('esquema')==""?'fin.': $this->session->userdata('esquema');
-//     }
     
 
     public function getEdoCta_get(){

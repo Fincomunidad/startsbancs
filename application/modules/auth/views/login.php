@@ -1,6 +1,6 @@
  <style type="text/css">
     body {
-      background-color: #DADADA;
+      background-color: #283668; //#DADADA;
     }
     body > .grid {
       height: 100%;

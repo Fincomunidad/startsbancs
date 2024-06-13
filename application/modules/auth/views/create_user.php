@@ -104,7 +104,7 @@
                   $checked = null;
                   $item = null;
               ?>
-                <div class="ui checkbox">              
+                <div class="ui checkbox" style="margin-right: 15px">              
 
               <input type="checkbox" name="groups[]" value="<?php echo $iconteo;?>"<?php echo $checked;?>>
               <label class="checkbox">
@@ -120,7 +120,7 @@
 <p>Fincomunidad</p>
 <p>
           <?php foreach ($sucursal as $sucursales):?>
-              <div class="ui checkbox">              
+              <div class="ui checkbox" style="margin-right: 15px">              
 
               <input type="checkbox" name="sucursal[]" value="<?php echo $sucursales['id'];?>">
               <label class="checkbox">
@@ -133,7 +133,7 @@
 <p>Bancomunidad</p>
 <p>
           <?php foreach ($sucursal as $sucursales):?>
-              <div class="ui checkbox">              
+              <div class="ui checkbox" style="margin-right: 15px">              
 
               <input type="checkbox" name="sucursalban[]" value="<?php echo $sucursales['id'];?>">
               <label class="checkbox">
@@ -147,7 +147,7 @@
 <p>AMA</p>
 <p>
           <?php foreach ($sucursal as $sucursales):?>
-              <div class="ui checkbox">              
+              <div class="ui checkbox" style="margin-right: 15px">              
 
               <input type="checkbox" name="sucursalama[]" value="<?php echo $sucursales['id'];?>">
               <label class="checkbox">
@@ -161,7 +161,7 @@
 <p>IMPULSO</p>
 <p>
           <?php foreach ($sucursal as $sucursales):?>
-              <div class="ui checkbox">              
+              <div class="ui checkbox" style="margin-right: 15px">              
 
               <input type="checkbox" name="sucursalimp[]" value="<?php echo $sucursales['id'];?>">
               <label class="checkbox">

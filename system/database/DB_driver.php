@@ -371,7 +371,7 @@ abstract class CI_DB_driver {
 				$this->$key = $val;
 			}
 		}
-		$this->initialize();
+
 		log_message('info', 'Database Driver Class Initialized');
 	}
 

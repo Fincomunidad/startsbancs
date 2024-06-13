@@ -75,11 +75,11 @@ $query_builder = TRUE;
 //'dbcollat' => 'utf8_general_ci',
 
 $db['default'] = array(
-	'dsn'	=> 'host=localhost dbname=bancoerp_database_2017 user=postgres password=root',
+	'dsn'	=> 'host=localhost dbname=bancoerp_database_20171 user=postgres password=root',
 	'hostname' => 'localhost',
 	'username' => 'postgres',
 	'password' => 'root',
-	'database' => 'bancoerp_database_2017',
+	'database' => 'bancoerpr_database_20171',
 	'dbdriver' => 'postgre',
 	'port' => 5432,
 	'dbprefix' => '',

@@ -195,6 +195,7 @@ function getCommonHeaderData($esquema, $dbQueries)
     return compact('logo', 'subtitulo', 'direccionSucursales');
 }
 
+// 2024-04-12
 /**
  * Genera el encabezado común para los informes.
  * 
@@ -212,6 +213,7 @@ function generateReportHeader($title, $logo, $subtitulo, $direccionSucursales, $
     return $html;
 }
 
+// 2024-04-12
 /**
  * Genera una tabla con espacio para una firmas.
  *
@@ -328,188 +330,7 @@ function generarTabla3Firmas($cargo1, $cargo2, $cargo3, $persona1, $persona2, $p
     return $tabla;
 }
 
-
-
-
-
-
-
-function tableCreatePlanPagosInd($title, $data)
-{
-    $html = '<table style="width:100%">';
-    $html .= '<tr>';
-
-    foreach ($title as $column) {
-        $html .= '<th>' . $column . '</th>';
-    }
-
-    $html .= '</tr>';
-    $intPago = 1;
-    $saldoCapital = 0;
-    $dblTotalFijo = 0;
-
-    foreach ($data as $row) {
-        $capital = $row['capital'];
-        $total = $row['total'] + $row['garantia'] + $row['ajuste'];
-
-        if ($dblTotalFijo == 0) {
-            $dblTotalFijo = $total;
-        }
-
-        if ($intPago == 1) {
-            $saldoCapital = $row['saldo_capital'] - $capital;
-
-            $html .= '<tr>';
-            $html .= '<td height="15"></td>';
-            $html .= '<td></td>';
-            $html .= '<td></td>';
-            $html .= '<td align="center"><b>' . number_format($row['saldo_capital'], 2, '.', ',') . '</b></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '</tr>';
-        } else {
-            if ($capital > $saldoCapital) {
-                $temporal = $saldoCapital;
-            }
-
-            $saldoCapital -= $capital;
-
-            if ($saldoCapital < 0) {
-                $capital = $temporal;
-                $saldoCapital = 0.0;
-                $total = $capital + $row['interes'] + $row['iva'];
-            }
-        }
-
-        $fecha = date_create($row['fecha_vence']);
-        $fecha = date_format($fecha, 'd/m/Y');
-
-        $html .= '<tr>';
-        $html .= '<td height="15" align="center">' . $intPago . '</td>';
-        $html .= '<td align="center">' . $fecha . '</td>';
-        $html .= '<td align="center">' . number_format($capital, 2, '.', ',') . '</td>';
-        $html .= '<td align="center">' . number_format($saldoCapital, 2, '.', ',') . '</td>';
-        $html .= '<td align="center">' . number_format($row['interes'], 2, '.', ',') . '</td>';
-        $html .= '<td align="center">' . number_format($row['iva'], 2, '.', ',') . '</td>';
-        $html .= '<td align="center">' . number_format($total, 2, '.', ',') . '</td>';
-        $html .= '<td align="center"></td>';
-        $html .= '<td align="center"></td>';
-        $html .= '<td align="center"></td>';
-        $html .= '</tr>';
-
-        $intPago++;
-    }
-
-    $html .= '</table>';
-    return $html;
-}
-
-function tableCreatePlanPagos($title, $data)
-{
-    $html = '<table style="width:100%">';
-    $html .= '<tr>';
-
-    foreach ($title as $column) {
-        $html .= '<th>' . $column . '</th>';
-    }
-
-    $html .= '</tr>';
-    $intPago = 1;
-    $saldoCapital = 0;
-    $dblTotalFijo = 0;
-    $capital = 0;
-
-    foreach ($data as $row) {
-        $total = $row['total'] + $row['garantia'] + $row['ajuste'];
-
-        if ($dblTotalFijo == 0) {
-            $dblTotalFijo = $total;
-        }
-
-        if ($intPago == 1) {
-            $capital = $row['total'] - $row['aportesol'];
-            $saldoCapital = $row['saldo_capital'] - $capital;
-
-            $html .= '<tr>';
-            $html .= '<td height="15"></td>';
-            $html .= '<td></td>';
-            $html .= '<td></td>';
-            $html .= '<td align="center"><b>' . formatNumber($row['saldo_capital']) . '</b></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '<td align="right"></td>';
-            $html .= '</tr>';
-        } else {
-            $saldoCapital -= $capital;
-
-            if ($saldoCapital < 0) {
-                $saldoCapital = 0.0;
-                $total = max($total, $dblTotalFijo);
-            }
-        }
-
-        // En caso de que el saldo capital del último pago sea mayor a 0
-        /* if ($intPago == count($data) && $saldoCapital > 0) {
-            $total += $saldoCapital;
-        } */
-
-        $fecha = date_create($row['fecha_vence']);
-        $fecha = date_format($fecha, 'd/m/Y');
-
-        $html .= '<tr>';
-        $html .= '<td height="15" align="center">' . $intPago . '</td>';
-        $html .= '<td align="center">' . $fecha . '</td>';
-        $html .= '<td align="center">' . formatNumber($capital) . '</td>';
-        $html .= '<td align="center">' . formatNumber($saldoCapital) . '</td>';
-        $html .= '<td align="center">' . formatNumber($row['aportesol']) . '</td>';
-        $html .= '<td align="center">' . formatNumber($row['garantia']) . '</td>';
-        $html .= '<td align="center">' . formatNumber($row['garantia'] * $row['numero']) . '</td>';
-        $html .= '<td align="center">' . formatNumber($total) . '</td>';
-        $html .= '<td align="center"></td>';
-        $html .= '<td align="center"></td>';
-        $html .= '<td align="center"></td>';
-        $html .= '</tr>';
-
-        $intPago++;
-    }
-
-    $html .= '</table>';
-    return $html;
-}
-
-
-/* function formatNumber($number, $decimals = 0)
-{
-    return number_format($number, $decimals);
-} */
-
-
-
-function generarEncabezadoFirmas($titulo1, $titulo2)
-{
-    $html = '
-    <table width="100%" border="0">
-        <tr align="center">
-            <td></td>
-            <td width="25%">' . $titulo1 . '</td>
-            <td></td>
-            <td>' . $titulo2 . '</td>
-            <td></td>
-        </tr>
-    </table>';
-
-    return $html;
-}
-
-
+// 2024-04-12
 /**
  * Genera un espacio vertical en HTML.
  *

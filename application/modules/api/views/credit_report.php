@@ -222,6 +222,7 @@ function generateDeclaracionVeracidad()
     return $html;
 }
 
+// 2024-04-12
 // Generación de HTML para pagaré
 /**
  * Genera el encabezado de un pagaré en formato HTML.
@@ -247,6 +248,7 @@ function generatePagareHeaderHtml($esquema, $lugarFecha, $pagare, $sucursal)
     return $html;
 }
 
+// 2024-04-12
 /**
  * Genera la tabla del encabezado del pagaré cuando el esquema de la sucursal es "ban.".
  *
@@ -267,6 +269,7 @@ function generatePagareHeaderTable($lugarFecha, $pagare)
         </table>';
 }
 
+// 2024-04-12
 /**
  * Genera la tabla del encabezado del pagaré cuando el esquema de la sucursal no es "ban.".
  *
@@ -289,6 +292,7 @@ function generatePagareHeaderTableWithSucursal($lugarFecha, $pagare, $sucursal)
         </table>';
 }
 
+// 2024-04-12
 /**
  * Genera el cuerpo HTML para el pagaré.
  *
@@ -319,6 +323,7 @@ function generatePagareBodyHtml($empresa, $monto, $montoLetra, $tasas)
 }
 
 // Generación de HTML para la TABLA DE AMORTIZACIONES
+// 2024-04-17
 /**
  * Genera el encabezado de la tabla de amortizaciones.
  *
@@ -388,6 +393,7 @@ function generarHeaderTablaAmortizaciones($credito, $nombreSucursal, $fechaEntre
     return $html;
 }
 
+// 2024-04-17
 /**
  * Crea una tabla de amortizaciones con los datos proporcionados.
  *
@@ -415,7 +421,7 @@ function tableCreateAmortizaciones($data, $esquema)
 
     $html .= '  </tr>';
 
-    // Agrega los datos de cada fila
+     // Agrega los datos de cada fila
     foreach ($data as $value) {
 
         // Formatea la fecha de vencimiento
@@ -444,6 +450,7 @@ function tableCreateAmortizaciones($data, $esquema)
     return $html;
 }
 
+// 2024-05-08
 // Generación de HTML para el checklist
 /**
  * Crea una tabla HTML para mostrar los datos del checklist.
@@ -485,6 +492,7 @@ function tableCheckList($data)
     return $html;
 }
 
+// 2024-05-06
 // HTML para recibo de retiro de garantía
 /**
  * Genera el cuerpo del recibo de autorización de traspaso de garantía.
@@ -507,7 +515,7 @@ function generateBodyReciboGarantia($garantiaData, $montoLetra)
                 Cantidad Transferida:
             </th>		
             <th>$'
-        . formatNumber($garantiaData['garantia_monto']) . ' -  (' . $montoLetra . ')
+                . formatNumber($garantiaData['garantia_monto']) . ' -  (' . $montoLetra . ')
             </th>
         </tr>
         <tr>
@@ -548,6 +556,7 @@ function generateBodyReciboGarantia($garantiaData, $montoLetra)
 }
 
 // Generación de HTML para la Solicitid de emisión de créditos
+// 2024-04-20
 /**
  * Genera el encabezado para el reporte de emisión de créditos o cheques.
  *
@@ -568,6 +577,7 @@ function headerEmisionCreditos($esquema, $sucursalNombre, $numeroSemana, $fechaL
     return $html;
 }
 
+// 2024-04-20
 /**
  * Crea una tabla HTML para mostrar los datos de emisión de créditos.
  *
@@ -662,320 +672,6 @@ function tableCreateEmisionCreditos($data, $esquema, $mostrarFecha = true)
     return $html;
 }
 
-
-
-
-
-
-
-// Generación de HTML para el Plan de Pagos
-function determinarEncabezadoPlanPagos($idproducto, $esquema)
-{
-    if ($idproducto === '10') {
-        return array("Pago", "Fecha programada", "Capital", "Saldo capital", "Interés", "IVA", "Total del pago", "Firma del promotor", "Ahorro voluntario", "Fecha de recibido");
-    } else {
-        if ($esquema === 'ban.') {
-            return array("Pago", "Fecha programada", "Capital", "Saldo capital", "Aporte solidario", "Garantía", "Gtía. acum.", "Total del pago", "Firma del promotor", "Ahorro voluntario", "Fecha de recibido");
-        } else {
-            return array("Pago", "Fecha programada", "Capital", "Saldo capital", "Interés", "Ahorro Compr.", "Ahorro Compr. acum.", "Total del pago", "Firma del promotor", "Ahorro voluntario", "Fecha de recibido");
-        }
-    }
-}
-
-function generarHeaderPlanPagos($cred, $sucursal, $colmenaData, $fecha, $persona)
-{
-
-    $html = '<h3 align="center">PLAN DE PAGOS</h3>';
-
-    $html .= '
-    <table style="width:100%; margin-bottom: 15px;" border="0" class="100p">
-        <tr>
-            <td class="header-plan" width="44%">
-                Sucursal: <strong>' . $cred['idsucursal'] . ' - ' . mb_strtoupper($sucursal['nombre']) . '</strong>
-            </td>
-            <td class="header-plan" width="36%">
-                Colmena:<strong> ' . $colmenaData['colmena_numero'] . ' ' . $colmenaData['colmena_nombre'] . '</strong>
-            </td>
-            <td class="header-plan" width="20%">
-                Fecha:<strong> ' . $fecha . '</strong>
-            </td>	
-            
-        </tr>
-        <tr>
-            <td class="header-plan">
-                Socia (o):<strong> ' . $cred['idacreditado'] . ' ' . $cred['nombre'] . '</strong>
-            </td>
-            <td class="header-plan">
-                Grupo:<strong> ' . $colmenaData['colmena_grupo'] . '</strong>
-            </td>
-            <td class="header-plan">
-                Crédito:<strong> ' . $cred['idcredito'] . '</strong>
-            </td>
-                    
-        </tr>	
-        <tr>
-            <td class="header-plan">
-                Tel:<strong> ' . $persona['celular'] . '</strong>
-            </td>
-            <td colspan="2" class="header-plan">
-                Propósito del crédito:<strong> ' . $cred['proy_nombre'] . '</strong>
-            </td>									
-        </tr>	
-    </table>';
-
-    return $html;
-}
-
-function avisoPlanPagos()
-{
-    $html = '
-    <p style="font-size: 10px">
-		La información contenida en el presente documento es un Plan de Pagos resumido para fines informativos y de control de campo, por lo que podrá estar sujeta a cambios y bajo ninguna circunstancia podrá considerarse como una oferta vinculante, ni como la autorización formal de crédito por parte de la empresa.
-	</p>
-    ';
-
-    return $html;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Generación de HTML para el contrato de crédito
-function datosRegistro($esquema)
-{
-    switch ($esquema) {
-        case 'ama.':
-            $notarioData = 'Que es una sociedad cooperativa debidamente constituida conforme a las leyes mexicanas, según consta en el testimonio notarial número 17,664, Volumen 220, con fecha 09 de abril de 2015, otorgado ante la fe del Lic. EDUARDO GARCÍA CORPUS, Notario Público número CIENTO CINCO, del Estado de Oaxaca.';
-            break;
-        default:
-            $notarioData = 'Que es una sociedad anónima debidamente constituida conforme a las leyes mexicanas, según consta en el testimonio notarial número 1305, de fecha 26 de mayo de 2014, otorgado ante la fe del Lic. JOSE JORGE ENRIQUE ZARATE RAMIREZ, Notario Público número OCHENTA Y CUATRO, del Estado de Oaxaca.';
-            break;
-    }
-
-    return $notarioData;
-}
-
-function generarHeaderContratoHTML($sucursal, $fecha, $idCredito)
-{
-    $html = '<h3 align="center">CONTRATO DE CRÉDITO</h3>';
-
-    $html .= '
-    <table style="width:100%; margin: 15px 0 0 0" border="0" class="100p">
-        <tr>
-            <th align="left" style="padding: 0 0 5px 0">
-                SUCURSAL: ' . $sucursal . '
-            </th>
-            <th align="right">
-                FECHA: ' . $fecha . '
-            </th>
-        </tr>
-        <tr>
-            <th align="left">
-                Contrato No.: ' . $idCredito . '
-            </th>		
-        </tr>				
-    </table>';
-
-    return $html;
-}
-
-function generarTextoAval($cred, $aval1, $aval2, $nivel)
-{
-    $texto = '<li>Que es (son):<br>';
-
-    if ($cred['idproducto'] === '10') {
-        $texto .= '<hr class="informacion">';
-    } elseif ($cred['idproducto'] === '1') {
-        $texto .= $aval1['nombre'] . '<br>';
-        if ($nivel >= 15) {
-            $texto .= $aval2['nombre'] . '<br>';
-        }
-    }
-    $texto .= 'Persona(s) física(s) de nacionalidad mexicana que dará(n) cumplimiento al presente contrato.';
-
-    $texto .= '</li>';
-
-    return $texto;
-}
-
-function generarTextoDomicilios($cred, $domicilioAval1, $domicilioAval2, $nivel)
-{
-    $texto = '<li>Que su(s) domicilio(s) respectivo(s), se ubica(n) en: <br>';
-    if ($cred['idproducto'] === '1') {
-
-        $texto .= '<ul><li>' . $domicilioAval1['direccion1'] . ', Colonia ' . $domicilioAval1['colonia'] . ', Municipio ' . $domicilioAval1['municipio'] . ', en el Estado de ' . $domicilioAval1['estado'] . '</li>';
-
-        if ($nivel >= 15) {
-            $texto .= '<li>' . $domicilioAval2['direccion1'] . ', Colonia ' . $domicilioAval2['colonia'] . ', Municipio ' . $domicilioAval2['municipio'] . ', en el Estado de ' . $domicilioAval2['estado'] . '</li>';
-        }
-    } else {
-        $texto .= '<hr class="informacion">';
-
-        if ($nivel >= 15) {
-            $texto .= '<hr class="informacion">';
-        }
-    }
-    $texto .= '</ul></li>';
-
-    return $texto;
-}
-
-
-function generarContratoHTML($cred, $empresa, $esquema, $tipoPersona, $nivel, $aval1, $aval2, $domicilioAval1, $domicilioAval2 = '', $monto, $montoLetra, $diasCredito, $fechaVencimiento, $tasas, $fecha, $sucursal)
-{
-
-    $html = '
-    <p>Contrato de crédito que celebran, por una parte, la C. ' . $cred['nombre'] . ' a quien en lo sucesivo se le denominará ACREDITADO, y ' . $empresa . ' en lo sucesivo denominada el ACREDITANTE, al tenor de las siguientes cláusulas y declaraciones:</p>
-    
-    <h4 align="center">DECLARACIONES</h4>';
-
-    $html .= '
-    <ol type="I">
-        <li><b>ACREDITANTE, por conducto de su representante:</b></li>
-            <ol type="a">
-                <li>' . datosRegistro($esquema) . '</li>
-                <li>Que cuenta con poderes suficientes para obligar a su representada en los términos y condiciones de este contrato, los cuales no le han sido revocados ni limitados.</li>
-                <li>Que tiene como objeto social, entre otros, otorgar servicios y productos financieros.</li>
-                <li>Que su domicilio se ubica en Rayón #704, Barrio San Antonio, Zimatlán de Álvarez, Oaxaca de Juárez, Oaxaca. C.P. 71200.</li>
-            </ol>
-        
-        <li><b>ACREDITADO, por su propio derecho:</b></li>
-            <ol type="a">
-                <li>Que es una persona ' . ($tipoPersona == 'M' ? 'moral legalmente constituida conforme a las leyes de la República Mexicana.' : 'física de nacionalidad mexicana, mayor de edad, en pleno uso y goce de sus facultades para la celebración del presente contrato de crédito.') . '</li>
-                <li>Que su domicilio se ubica en ' . $cred['direccion'] . '.</li>
-                <li>Que es socio de la ACREDITANTE.</li>
-                <li>Que es su deseo celebrar el presente contrato.</li>
-            </ol>
-        <li><b>Del (los) AVAL(es):</b></li>
-            <ol type="a">
-                ' . generarTextoAval($cred, $aval1, $aval2, $nivel) . '
-                
-                <li>Que, en virtud de las relaciones personales y jurídicas que tiene(n) con el ACREDITADO, es de su interés hacer con el presente contrato el objeto de obligarse conjunta y solidariamente con éste último frente al ACREDITANTE, en el cumplimiento de todas las obligaciones establecidas en el presente contrato a su cargo y, por tanto, es su intención constituirse como obligado(s) solidario(s), así como suscribir el o los pagarés con que se documente(n) la(s) disposición(es) del crédito objeto del presente contrato en su carácter de avalista(s) y garante(s).</li>
-                ' . generarTextoDomicilios($cred, $domicilioAval1, $domicilioAval2, $nivel) . '
-                <li>Que es su voluntad comparecer en la celebración del presente contrato con el carácter de aval(es).</li>
-                <li>Que, en caso de incumplimiento del ACREDITADO, se comprometen al pago del capital más intereses devengados en un plazo de cinco días contados a partir de la fecha en que se haga obligatorio el pago del crédito.</li>
-            </ol>
-    </ol>
-
-    <h4 align="center">CLÁUSULAS</h4>
-
-    <p><b>Primera.- Importe.</b> La ACREDITANTE entrega al ACREDITADO en la fecha de firma del presente contrato la cantidad de $' . $monto . ' (' . $montoLetra . '). El acreditado se obliga a pagar el crédito de conformidad con los pagos fijados en la cláusula tercera.</p>
-
-    <p><b>Segunda.- Vigencia.</b> La vigencia de este contrato es de ' . $diasCredito . ' días contados a partir de la fecha del presente contrato, por lo que concluirá precisamente el día ' . $fechaVencimiento . '. No obstante a su terminación, este contrato producirá todos sus efectos legales hasta que el ACREDITADO haya liquidado en su totalidad el importe del crédito más sus accesorios a la ACREDITANTE.</p>
-
-    <p><b>Tercera.- Plan de Pagos.</b> Los plazos y montos a pagarse se regirán mediante la Tabla de Amortización Anexa.</p>
-
-    <p><b>Cuarta.- Intereses Ordinarios.</b> El ACREDITADO se obliga a pagar a la ACREDITANTE, durante la vigencia del presente contrato, intereses ordinarios sobre capital insoluto del crédito y se calcularan a una tasa mensual del ' . $tasas['tasaMensual'] . '%. El ACREDITADO pagará intereses ordinarios a partir de la fecha en que se disponga del crédito conforme a lo establecido en este contrato, hasta que cubra el importe total del crédito.</p> 
-
-    <p><b>Quinta.- Intereses Moratorios.</b> En caso de que el ACREDITADO no pague puntualmente en la fechas establecidas, se obliga a pagar como pena convencional una tasa de interés moratoria mensual de ' . $tasas['tasaMensualMora'] . '% aplicada a cada mes o fracción de retraso. La tasa quedará como única en el periodo de mora.</p>
-
-    <p><b>Sexta.- Leyes y Tribunales.</b> Este contrato se rige de acuerdo a las Leyes del Estado de Oaxaca. El domicilio para dirimir cualquier controversia respecto al presente contrato, así como su interpretación legal, se sujetará a la jurisdicción y territorio del domicilio de la ACREDITANTE o la que esta elija, renunciando el ACREDITADO y el (los) AVAL(es) a cualquier jurisdicción que le corresponda de conformidad con la ley que rija en su domicilio.</p>
-
-    <p><b>Séptima.- Garantías.</b> En la eventualidad de requerir garantías al ACREDITADO, las mismas serán detalladas en un documento anexo a este contrato. Dichas garantías serán válidas durante la vigencia del presente contrato y hasta que el ACREDITADO haya cumplido con todas las obligaciones establecidas en el mismo.</p>
-
-    <p>En caso de incumplimiento por parte del ACREDITADO, la ACREDITANTE tendrá el derecho de tomar posesión de las garantías ofrecidas y, a su discreción, proceder a su venta o disposición para cubrir cualquier adeudo pendiente.</p>
-
-    <p>El ACREDITADO autoriza expresamente a la ACREDITANTE para realizar los trámites y gestiones necesarios para la toma de posesión y eventual venta de las garantías, renunciando a cualquier notificación adicional o proceso legal que pudiera ser requerido para tales efectos.</p>
-    
-    <p>La tasación de las garantías y los procedimientos para su realización se llevarán a cabo conforme a lo dispuesto por las leyes aplicables.</p>
-
-    <p><b>Octava.- Disposición para compensación.</b> A fin de garantizar la total recuperación del crédito, el ACREDITADO autoriza expresamente a la ACREDITANTE a compensar cualquier adeudo pendiente mediante la aplicación de los haberes que tenga depositados en cuentas de ahorro a la vista o a plazo, o cualquier otra cuenta con la ACREDITANTE. Lo anterior sin necesidad de requerimiento o demanda alguna. De darse el supuesto anterior, las partes expresamente pactan que la aplicación de los recursos depositados en las referidas cuentas se apliquen al pago del crédito de la forma siguiente: intereses moratorios, intereses ordinarios y, si sobrase cantidad alguna, esta se aplicará al pago del capital hasta donde alcance. Una vez aplicados los recursos, la ACREDITANTE notificará al ACREDITADO el monto abonado por la deuda.</p>
-
-    <p><b>Novena.- Causas de Vencimiento.</b> El plazo para el pago del crédito y sus accesorios podrá vencer anticipadamente en caso de que ocurra alguna de las siguientes situaciones:</p>
-
-    <ol>
-        <li>Si el ACREDITADO no realiza el pago puntual e íntegro de alguna amortización de capital vencido devengado, en virtud del presente contrato y en relación con el crédito. Cada situación de este tipo constituirá una "Causa de Vencimiento Anticipado".</li>
-        <li>En caso de que el ACREDITADO incumpla con cualquiera de las obligaciones establecidas en el presente contrato.</li>
-        <li>Si el (los) AVAL (es) no cumplen con su obligación de garantes o deudores solidarios, de acuerdo con las declaratorias correspondientes.</li>
-    </ol>
-
-    <p>En caso de que se presente alguna de las causas de vencimiento anticipado antes mencionadas, la ACREDITANTE tendrá el derecho de exigir el pago inmediato del total del crédito y sus accesorios. En tal situación, el ACREDITADO se compromete a liquidar de manera inmediata el importe total del crédito y cualquier otra suma pendiente bajo el presente contrato, según lo estipulado en el caso de que haya suscrito este documento. En caso contrario, el ACREDITADO se obliga a pagar intereses moratorios conforme a lo pactado en este instrumento.</p>
-
-    <p><b>Décima.- Cambio de Domicilio. </b>El ACREDITADO se compromete a informar de manera inmediata y obligatoria a la ACREDITANTE sobre cualquier cambio de domicilio, dentro de los cinco días naturales siguientes a la fecha en que dicho cambio se efectúe. Esta notificación es indispensable para la correcta verificación del cambio de domicilio.</p>
-
-    <p>Este contrato se firma el  ' . $fecha . ', en ' . $sucursal['municipio'] . '.</p>
-    ';
-
-    return $html;
-}
-
-
-
-
-
-// HTML PARA GENERAR CONVENIO 
-function generarBodyConvenio($empresa, $cred, $monto, $montoLetra, $fechaLetras, $tasa, $dia, $mes, $año)
-{
-    $html = '
-    <h3 align="center">CONVENIO</h3>
-
-    <h4 align="right">' . $cred['idpagare'] . '</h4>
-
-    <p>Convenio celebrado entre el ' . $empresa . ' representado en este acto por el C. Mario Enrique Rendón Hernández y por la otra parte como prestataria a la Sra. ' . $cred['nombre'] . '.</p>
-    
-    <p>Las “partes” contratantes manifiestan su consentimiento en las siguientes declaraciones y cláusulas.</p>
-
-    <h4 align="center">DECLARACIONES</h4>
-
-    <ol type="I">
-        <li>
-            El ' . $empresa . ', está legalmente constituida y autorizada para celebrar este tipo de convenios.
-        </li>
-        <li>
-            La prestataria es una persona física con capacidad jurídica para celebrar contratos, con domicilio en la calle de ' . $cred['direccion'] . ', integrante de la colmena No. ' . $cred['nomcolmena'] . '.
-        </li>
-    </ol>
-
-    <p>Las “partes” declaran que se obligan al cumplimiento de este convenio bajo las siguientes:</p>
-
-    <h4 align="center">CLÁUSULAS</h4>
-
-    <ol type="I">
-        <li>
-            Por medio del presente Convenio, el ' . $empresa . ' entrega a la prestataria la cantidad de $' . $monto . ' (' . $montoLetra . ') el día ' . $fechaLetras . ', como capital semilla para la actividad de: ' . $cred['proy_nombre'] . '.
-        </li>
-        <li>
-            La prestataria se compromete a pagar al ' . $empresa . ' en efectivo mediante pagos semanales. Dichos pagos se realizarán en reuniones de la colmena cada 7 días a partir de la fecha de entrega del capital semilla.
-        </li>
-        <li>
-            La prestataria pagará un Aporte Solidario fijo equivalente al ' . $tasa . '% mensual.
-        </li>
-        <li>
-            Cualquier problema de interpretación o incumplimiento de este convenio, las partes se someten a los tribunales competentes de la ciudad de Oaxaca de Juárez, Oaxaca, renunciando a cualquier otro que pudiera corresponderles en razón de su domicilio. 
-        </li>
-    </ol>
-
-    <p>Leído el presente convenio, conociendo su contenido y fuerza legal, firman al calce para ratificarlo a los ' . $dia . ' días del mes de ' . $mes . ' del año ' . $año . '.</p>
-
-    <table style="width:100%" border=0>
-        <tr>
-            <td  align="center" width="25%">' . $empresa . '</td>
-            <td></td>
-            <td  align="center" width="25%">Promotor (a)</td>
-            <td></td>
-            <td  align="center" width="25%">Prestataria</td>
-        </tr>
-    </table>
-    ';
-
-    return $html;
-}
-
-
-
 /**
  * Genera una tabla HTML con los datos proporcionados.
  *
@@ -1014,7 +710,7 @@ function generateNivelesTable($title, $data)
     return $html;
 }
 
-// HTML para reporte de créditos activos
+// HTML para reporte de créditos activos - 2024-05-15
 /**
  * Genera una tabla HTML con los datos de los creditos activos.
  *
@@ -1027,7 +723,7 @@ function generateCreditosActivosTable($title, $data, $esquema)
     $htmlInit = '<br><br><table style="width:100%" align="center">';
     $htmlInit .= '  <tr>';
     foreach ($title as $value) {
-        $htmlInit .= '    <th>' . htmlspecialchars($value) . '</th>';
+        $htmlInit .= '    <th>' . $value . '</th>';
     }
     $htmlInit .= '  </tr>';
 
@@ -1045,22 +741,22 @@ function generateCreditosActivosTable($title, $data, $esquema)
         }
 
         $html .= '  <tr>';
-        $html .= '  <td style="width:5px;">' . htmlspecialchars($contador) . '</td>';
-        $html .= '  <td style="width:3px;">' . htmlspecialchars($value['idsucursal']) . '</td>';
-        $html .= '  <td style="width:3px;">' . htmlspecialchars($value['idcredito']) . '</td>';
-        $html .= '  <td style="width:45px;">' . htmlspecialchars($value['fecha_dispersa']) . '</td>';
-        $html .= '  <td class="text-left" style="width:100px;">' . htmlspecialchars($value['idacreditado']) . ' - ' . htmlspecialchars($value['nombre']) . '</td>';
-        $html .= '  <td style="width:5px;">' . htmlspecialchars($value['nivel']) . '</td>';
-        $html .= '  <td style="width:40px;">' . htmlspecialchars(formatNumber($value['monto'])) . '</td>';
-        $html .= '  <td style="width:5px;">' . htmlspecialchars($value['num_pagos']) . '</td>';
+        $html .= '  <td style="width:5px;">' . $contador . '</td>';
+        $html .= '  <td style="width:3px;">' . $value['idsucursal'] . '</td>';
+        $html .= '  <td style="width:3px;">' . $value['idcredito'] . '</td>';
+        $html .= '  <td style="width:45px;">' . $value['fecha_dispersa'] . '</td>';
+        $html .= '  <td style="width:100px; text-align: left; padding-left: 8px; padding-right: 7px">' . $value['idacreditado'] . ' - ' . $value['nombre'] . '</td>';
+        $html .= '  <td style="width:5px;">' . $value['nivel'] . '</td>';
+        $html .= '  <td style="width:40px;">' . formatNumber($value['monto']) . '</td>';
+        $html .= '  <td style="width:5px;">' . $value['num_pagos'] . '</td>';
 
         if ($esquema == 'ama.') {
-            $html .= '  <td style="width:5px;">' . htmlspecialchars($value['periodo']) . '</td>';
+            $html .= '  <td style="width:5px;">' . $value['periodo'] . '</td>';
         }
         
-        $html .= '  <td style="width:3px;">' . htmlspecialchars($value['grupo_numero']) . '</td>';
-        $html .= '  <td class="text-left" style="width:80px;">' . htmlspecialchars($value['col_numero']) . ' - ' . htmlspecialchars($value['col_nombre']) . '</td>';
-        $html .= '  <td style="width:80px;">' . htmlspecialchars($value['promotor']) . '</td>';
+        $html .= '  <td style="width:3px;">' . $value['grupo_numero'] . '</td>';
+        $html .= '  <td style="width:80px; text-align: left; padding-left: 8px;">' . $value['col_numero'] . ' - ' . $value['col_nombre'] . '</td>';
+        $html .= '  <td style="width:80px;">' . $value['promotor'] . '</td>';
         $html .= '  </tr>';
         $contador++;
     }
@@ -1068,4 +764,3 @@ function generateCreditosActivosTable($title, $data, $esquema)
     $html .= '</table>';
     return $html;
 }
-

@@ -78,7 +78,7 @@
 
 	 <div class="three fields">      
 	 	<div class=" field ">
-			<div class="ui checkbox">              
+			<div class="ui checkbox" style="margin-right: 15px">              
 				<input type="checkbox" name="lock" value="<?php echo 'true';?>"<?php echo $checked;?>/>
 				<label class="checkbox">
 				<?php echo htmlspecialchars("Bloqueado",ENT_QUOTES,'UTF-8');?>
@@ -121,7 +121,7 @@
                       }
                   }
               ?>
-                <div class="ui checkbox">              
+                <div class="ui checkbox" style="margin-right: 15px">              
                 <input type="checkbox" name="groups[]" value="<?php echo $group['id'];?>"<?php echo $checked;?>/>
                 <label class="checkbox">
                 <?php echo htmlspecialchars($group['name'],ENT_QUOTES,'UTF-8');?>
@@ -143,7 +143,7 @@
                       }
                   }
               ?>
-              <div class="ui checkbox">              
+              <div class="ui checkbox" style="margin-right: 15px">              
               <input type="checkbox" name="sucursal[]" value="<?php echo $sucursal['id'];?>"<?php echo $checked;?>/>
               <label class="checkbox">
               <?php echo htmlspecialchars($sucursal['nombre'],ENT_QUOTES,'UTF-8');?>
@@ -165,7 +165,7 @@
                       }
                   }
               ?>
-              <div class="ui checkbox">              
+              <div class="ui checkbox" style="margin-right: 15px">              
               <input type="checkbox" name="sucursalban[]" value="<?php echo $sucursal['id'];?>"<?php echo $checked;?>/>
               <label class="checkbox">
               <?php echo htmlspecialchars($sucursal['nombre'],ENT_QUOTES,'UTF-8');?>
@@ -186,7 +186,7 @@
                       }
                   }
               ?>
-              <div class="ui checkbox">              
+              <div class="ui checkbox" style="margin-right: 15px">              
               <input type="checkbox" name="sucursalama[]" value="<?php echo $sucursal['id'];?>"<?php echo $checked;?>/>
               <label class="checkbox">
               <?php echo htmlspecialchars($sucursal['nombre'],ENT_QUOTES,'UTF-8');?>
@@ -208,7 +208,7 @@
                       }
                   }
               ?>
-              <div class="ui checkbox">              
+              <div class="ui checkbox" style="margin-right: 15px">              
               <input type="checkbox" name="sucursalimp[]" value="<?php echo $sucursal['id'];?>"<?php echo $checked;?>/>
               <label class="checkbox">
               <?php echo htmlspecialchars($sucursal['nombre'],ENT_QUOTES,'UTF-8');?>

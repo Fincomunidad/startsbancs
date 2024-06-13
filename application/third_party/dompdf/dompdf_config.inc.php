@@ -12,7 +12,6 @@
 if ( class_exists( 'DOMPDF' , false ) ) { return; }
 
 PHP_VERSION >= 5.0 or die("DOMPDF requires PHP 5.0+");
-define("DOMPDF_ENABLE_HTML5PARSER", true); //Add for working in php 7.4
 
 /**
  * The root of your DOMPDF installation

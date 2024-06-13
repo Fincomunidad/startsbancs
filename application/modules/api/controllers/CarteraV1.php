@@ -574,7 +574,7 @@ class CarteraV1 extends BaseV1 {
 			CASE WHEN btrim(COALESCE(p.apaterno, ''::character varying)::text) <> ''::text THEN COALESCE(' '::text || p.apaterno::text, ''::character varying::text) ELSE ''::text END) ||
 			CASE WHEN btrim(COALESCE(p.amaterno, ''::character varying)::text) <> ''::text THEN COALESCE(' '::text || p.amaterno::text, ''::character varying::text) ELSE ''::text END END AS nombre, 
 			b.idacreditado, c.colmena_numero || ' ' || c.colmena_nombre as nombrecol, c.grupo_nombre  from public.personas as p  left join public.acreditado as b on p.idpersona = b.idpersona  left join 
-			".$this->esquema."get_colmena_grupo as c on c.idgrupo = b.idgrupo   WHERE b.inhabilitado = FALSE AND  CASE WHEN p.tipo::text = 'M'::text THEN p.cia::text ELSE ((COALESCE(p.nombre1, ''::character varying)::text ||
+			".$this->esquema."get_colmena_grupo as c on c.idgrupo = b.idgrupo  WHERE b.inhabilitado = FALSE AND  CASE WHEN p.tipo::text = 'M'::text THEN p.cia::text ELSE ((COALESCE(p.nombre1, ''::character varying)::text ||
 			CASE WHEN btrim(COALESCE(p.nombre2, ''::character varying)::text) <> ''::text THEN COALESCE(' '::text || p.nombre2::text, ''::character varying::text) ELSE ''::text END) ||
 			CASE WHEN btrim(COALESCE(p.apaterno, ''::character varying)::text) <> ''::text THEN COALESCE(' '::text || p.apaterno::text, ''::character varying::text) ELSE ''::text END) ||
 			CASE WHEN btrim(COALESCE(p.amaterno, ''::character varying)::text) <> ''::text THEN COALESCE(' '::text || p.amaterno::text, ''::character varying::text) ELSE ''::text END END like '%".$nombre."%' limit 8";
@@ -2632,6 +2632,7 @@ class CarteraV1 extends BaseV1 {
 
 
 
+
 	public function findCajaOpera($idbov, $idsuc, $fecini, $fecfin) {
 		//Busca las cajas de la boveda correspondiente
 		$query = "select b.idbanco from ".$this->esquema."boveda a join ".$this->esquema."boveda_mov b on b.idmov = a.idmov where a.idclave ='".$idbov."' and b.movimiento ='E' and b.des_ori= 'C' and b.tipo ='O' and a.fecinicio::date ='".$fecini. "' group by b.idbanco";
@@ -3334,7 +3335,6 @@ class CarteraV1 extends BaseV1 {
 		return $bene;
 	}
 	
-
 	public function creditosAut_get(){
 		$valor  = $this->uri->segment(4);
 		$filter = "(c.fecha_aprov is null and c.fecha_dispersa is null)";
@@ -3388,6 +3388,47 @@ class CarteraV1 extends BaseV1 {
 			}		
 		}
 	}
+	
+	
+	
+	function acreditado_gtia_get(){
+		$idacreditado = $this->uri->segment(4);
+		if (!is_numeric($idacreditado)){
+		   $this->returnCodeWithToken();
+		}else {
+			$acre = "SELECT idacreditado, nombre, idsucursal, edocivil, edocivil_nombre, idactividad, actividad_nombre,
+				 direccion, idgrupo, grupo_numero, grupo_nombre, col_numero, col_nombre FROM ".$this->esquema."get_acreditado_solicitud 
+				 where acreditadoid = ".$idacreditado;
+			$credits = "select a.idcredito as name, a.idcredito as value from 
+			".$this->esquema."creditos a left join ".$this->esquema."creditos_gtia b 
+			on b.idcredito = a.idcredito join public.acreditado c on c.acreditadoid = a.idacreditado
+			where c.acreditadoid =".$idacreditado." and a.idsucursal ='".$this->sucursal."' and b.idcredito is null order by a.idcredito desc;";
 
+			$queries = array ("acreditado" => $acre,
+								"creditos" => $credits);
+			$answer = $this->base->queriesSelect($queries);
+			return $this->validaCode($answer);
+
+		}
+	}
+
+	function addGtia_acreditado_post(){
+		$valores = $this->post('data')?$this->post('data', TRUE):array();
+		$this->load->model('credito_model','creditos');
+		$datos = fn_extraer($valores,'N');
+		
+		$this->form_validation->set_data( $datos );
+		if ($this->form_validation->run('creditogtia_post') == TRUE) {
+			$data = $this->base->querySelect("Select idacreditado from  public.acreditado where acreditadoid =".$datos['idacreditado'], TRUE);
+			print_r($data);
+			die();
+
+
+			$updatetrans = $this->creditos->addGtia($datos, $option);
+			$this->validaCode($updatetrans);
+		}else {
+			$this->validaForm();
+		}		
+	}	
 
 }

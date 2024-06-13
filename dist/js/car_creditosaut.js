@@ -224,7 +224,7 @@ var RecordDetalle = function (_React$Component3) {
                 React.createElement(
                     "td",
                     null,
-                    React.createElement("input", { type: "text", className: "styleNo", id: "idcredito[]", name: "idcredito[]", value: this.props.registro.idcredito }),
+                    React.createElement("input", { type: "text", readOnly: "readOnly", className: "styleNoTwo", id: "idcredito[]", name: "idcredito[]", value: this.props.registro.idcredito }),
                     " "
                 ),
                 React.createElement(
@@ -236,11 +236,6 @@ var RecordDetalle = function (_React$Component3) {
                     "td",
                     null,
                     this.props.registro.nombre
-                ),
-                React.createElement(
-                    "td",
-                    null,
-                    this.props.registro.idcredito
                 ),
                 React.createElement(
                     "td",
@@ -335,7 +330,7 @@ var Table = function (_React$Component4) {
                         React.createElement(
                             "thead",
                             null,
-                            React.createElement(Lista, { enca: ['', 'Id Crédito', 'Fecha entrega', 'Nombre', 'Credito', 'Nivel', 'Monto', 'Garamtia', 'Importe', 'Colmena', 'Grupo', 'Promotor', 'Aprobado', 'Evento'] })
+                            React.createElement(Lista, { enca: ['', 'Id Crédito', 'Fecha entrega', 'Nombre', 'Nivel', 'Monto', 'Garamtia', 'Importe', 'Colmena', 'Grupo', 'Promotor', 'Aprobado'] })
                         ),
                         React.createElement(
                             "tbody",

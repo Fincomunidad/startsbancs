@@ -242,6 +242,7 @@ function numberToWords($num, $fem = false, $dec = true)
     return $end_num;
 }
 
+// 2024-04-17
 /**
  * Formatea un número con decimales y separador de miles.
  *
@@ -254,7 +255,6 @@ function formatNumber($number, $decimals = 2)
 {
     return number_format($number, $decimals, '.', ',');
 }
-
 
 /**
  * Calcula la edad basada en la fecha de nacimiento y una fecha de referencia.
@@ -276,6 +276,7 @@ function calcularEdad($fechaNacimiento, $fechaRef)
     }
 }
 
+// 2024-04-20
 /**
  * Convierte una fecha en formato DateTime a su representación en texto,
  * opcionalmente incluyendo el día de la semana.
@@ -321,37 +322,7 @@ function convertirFechaLetras($fecha, $incluyeDia = false)
     return $fechaLetras;
 }
 
-function convertirNumeroALetras($numero)
-{
-    $unidades = array('', 'uno', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve');
-    $decenas = array('', 'diez', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa');
-    $diez_a_veinte = array('diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve');
-
-    $resultado = '';
-
-    $numero = str_pad($numero, 2, '0', STR_PAD_LEFT);
-
-    $unidad = (int) $numero % 10;
-    $decena = (int) ($numero / 10) % 10;
-
-    if ($numero == 0) {
-        $resultado = 'cero';
-    } elseif ($numero <= 9) {
-        $resultado = $unidades[$unidad];
-    } elseif ($numero == 10) {
-        $resultado = 'diez';
-    } elseif ($numero < 20) {
-        $resultado = $diez_a_veinte[$unidad];
-    } elseif ($numero <= 90) {
-        $resultado = $decenas[$decena];
-        if ($unidad > 0) {
-            $resultado .= ' y ' . $unidades[$unidad];
-        }
-    }
-
-    return $resultado;
-}
-
+// 2024-04-20
 /**
  * Obtiene el número de semana a partir de una fecha.
  *
@@ -380,6 +351,7 @@ function getNumeroSemana($fecha)
     // Devuelve el número de semana
     return $numeroSemana;
 }
+
 
 /**
  * Convierte el código de tipo de vivienda en su nombre descriptivo correspondiente.
@@ -426,6 +398,7 @@ function getPeriodo($periodo)
     return $periodos[$periodo];
 }
 
+// 2024-04-17
 /**
  * Calcula el número de días entre dos fechas.
  *
@@ -470,6 +443,209 @@ function seleccionarAval($aval1, $aval2)
     }
 }
 
+/**
+ * Genera la cabecera básica del HTML para un informe interno. 2023-09-28
+ *
+ * @param string $title   El título del informe.
+ * @param string $fontSize Tamaño de fuente (por ejemplo, '12px') (opcional).
+ * @return string La cabecera del HTML.
+ */
+function generateBasicHeader($title, $fontSize = '12px') {
+    $header = '
+	<!DOCTYPE html>
+	<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>' . $title . '</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: ' . $fontSize . ';
+            }
+            h3, h4 {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>';
+    
+    return $header;
+}
+
+/**
+ * Agrega el logo y subtítulo a la cabecera del informe. 2023-09-08
+ *
+ * @param string $header   La cabecera del informe generada por generateBasicHeader.
+ * @param string $empresa  El nombre de la empresa.
+ * @param string $titulo   El subtítulo o título secundario.
+ * @param string $logo     El código HTML para mostrar el logo (opcional).
+ * @return string La cabecera completa con logo y subtítulo.
+ */
+function addLogoAndSubtitle2($header, $titulo, $subtitulo1 = '', $subtitulo2 = '', $logo = '') {
+    if (!empty($logo)) {
+        $header .= '<div style="margin-left:120px;">' . $logo . '</div>';
+    }
+    $header .= $titulo;
+    $header .= $subtitulo1;
+	$header .= $subtitulo2;
+    
+    return $header;
+}
+
+// Correcto
+function addLogoAndSubtitle($header, $titulo, $subtitulos = [], $logo = '')
+{
+	foreach ($subtitulos as $subtitulo) {
+        $subtit .= $subtitulo;
+    }
+	
+	if (!empty($logo)) {
+			$header .= '<h3 style="margin-left:120px;">' . $titulo . '</h3>';
+			$header .= $subtit;
+			$header .= $logo;
+		} else {
+			$header .= '<h3>' . $titulo . '</h3>';
+			$header .= $subtit;
+		}
+
+    return $header;
+}
+
+/**
+ * Obtiene el nombre de la sucursal en el formato deseado.
+ *
+ * @param string $sucursalId El ID de la sucursal.
+ * @return string El nombre de la sucursal formateado.
+ */
+function obtenerNombreSucursal($sucursalId) {
+    // Verificar si el ID de la sucursal es igual a '01'
+    if ($sucursalId === '01') {
+        return 'ZIMATLÁN';
+    }
+
+    // Obtener el nombre de la sucursal desde la sesión y convertirlo a mayúsculas
+    $nombreSucursal = mb_strtoupper(get_instance()->session->userdata('nomsucursal'));
+
+    return $nombreSucursal;
+}
+
+/**
+ * Genera una tabla con espacio para dos firmas.
+ *
+ * @param string $cargo1 El cargo de la persona1.
+ * @param string $persona1 El nombre de la persona1.
+ * @param string $cargo2 El cargo de la persona2.
+ * @param string $persona2 El nombre de la persona2.
+ * @param string $text1 Cargo o texto adicional.
+ * @param string $text2 Cargo o texto adicional.
+ * @return string La tabla en HTML.
+ */
+function generarTabla2Firmas2($cargo1, $persona1, $cargo2, $persona2, $text1 = '', $text2 = '') {
+    $tabla = '
+        <table style="width:100%; margin-bottom: 45px"  border="0">
+            <tr>
+                <td></td>
+                <td align="center"  width="25%">' . $cargo1 . '<br><br><br>&nbsp;</td>
+                <td></td>
+                <td align="center"  width="25%">' . $cargo2 . '<br><br><br>&nbsp;</td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td style="border-top: 1px solid" align="center"  width="25%">' . $persona1 . '<br>' . $text1 . '</td>
+                <td></td>
+                <td style="border-top: 1px solid" align="center"  width="25%">' . $persona2 . '<br>' . $text2 . '</td>
+                <td></td>
+            </tr>
+        </table>';
+        
+    return $tabla;
+}
+
+
+/**
+ * Genera la primera parte del HTML para un informe interno (No incluye logo ni direcciones).
+ *
+ * @param string $title El título del informe.
+ * @return string La primera parte del HTML.
+ */
+function generateReportHeader2($title, $empresa, $titulo, $logo = '', $fontSize = '12px') {
+    $header = '
+	<!DOCTYPE html>
+	<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset="UTF-8">
+        <title>' . $title . '</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: ' . $fontSize .';
+            }
+			h3 {
+				text-align: center;
+			}
+			h4 {
+				text-align: center;
+			}
+        </style>
+    </head>
+    <body>';
+        
+		
+		 if (!empty($logo)) {
+			$header .= '<h3 style="margin-left:120px;">' . $empresa . '</h3>';
+			$header .= '<h4>' . $titulo . '</h4>';
+			$header .= $logo;
+		} else {
+			$header .= '<h3>' . $empresa . '</h3>';
+			$header .= '<h4>' . $titulo . '</h4>';
+		}
+
+    return $header;
+}
+
+// Función para generar o descargar el PDF
+function generarPDF2($html, $nombreArchivo)
+{
+    ob_clean();
+    $CI = &get_instance(); // Accede a la instancia de CodeIgniter
+    $CI->load->library('dompdf_gen');
+    $CI->dompdf->load_html($html);
+    $CI->dompdf->set_paper('letter', 'portrait');
+    $CI->dompdf->render();
+	
+    $canvas = $CI->dompdf->get_canvas();
+    $font = Font_Metrics::get_font("helvetica", "bold");
+    $canvas->page_text(500, 770, "Página: {PAGE_NUM} de {PAGE_COUNT}", $font, 7, array(0, 0, 0));
+
+    $documento = $CI->dompdf->stream($nombreArchivo, array("Attachment" => 0));
+}
+
+/**
+ * Genera la primera parte del HTML para un informe interno (No incluye logo ni direcciones).
+ *
+ * @param string $title El título del informe.
+ * @return string La primera parte del HTML.
+ */
+function generarPDF($html, $nombreArchivo, $mostrarNumeroDePagina = true)
+{
+    ob_clean();
+    $CI = &get_instance(); // Accede a la instancia de CodeIgniter
+    $CI->load->library('dompdf_gen');
+    $CI->dompdf->load_html($html);
+    $CI->dompdf->set_paper('letter', 'portrait');
+    $CI->dompdf->render();
+
+    if ($mostrarNumeroDePagina) {
+        $canvas = $CI->dompdf->get_canvas();
+        $font = Font_Metrics::get_font("helvetica", "bold");
+        $canvas->page_text(500, 770, "Página: {PAGE_NUM} de {PAGE_COUNT}", $font, 7, array(0, 0, 0));
+    }
+
+    $documento = $CI->dompdf->stream($nombreArchivo, array("Attachment" => 0));
+} 
+
 // Reduce los ceros a la derecha del punto decimal
 function formatearDecimal($numero)
 {
@@ -497,30 +673,3 @@ function formatearDecimal($numero)
 
     return $cadena;
 }
-
-// obtiene la primera letra de la empresa
-function getEmpresaCode($esquema)
-{
-    switch ($esquema) {
-        case "fin.":
-            return 'F';
-        case "ban.":
-            return 'B';
-        case "imp.":
-            return 'I';
-        default:
-            return '';
-    }
-}
-
-/* function getEsquemaByEmpresa($empresa)
-{
-    switch ($empresa) {
-        case "B":
-            return 'ban.';
-        case "I":
-            return 'imp.';
-        default:
-            return 'fin.';
-    }
-} */

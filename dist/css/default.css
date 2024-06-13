@@ -109,6 +109,9 @@ main {
 .styleNo {
     width: 60px!important;
 }
+.styleNoTwo {
+    width: 75px!important;	
+}
 
 .totalxpagar {
     font-size: 20px!important;

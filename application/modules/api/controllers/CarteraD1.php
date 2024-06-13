@@ -640,7 +640,7 @@ class CarteraD1 extends BaseV1 {
 	}
 
       //2019-08-15
-      public function get_acreditado_get() {
+	public function get_acreditado_get() {
 		$idacreditado = $this->uri->segment(4);
 
 		$where = array("acreditadoid" => $idacreditado);
@@ -2070,7 +2070,7 @@ function numeroToLetras($num, $fem = false, $dec = true, $pesos=true) {
                   CASE WHEN c.empresa='B' THEN 'Bancomunidad' WHEN c.empresa='F' THEN 'Fincomunidad' END as empresa 
                   FROM col.colmenas as c LEFT JOIN security.users as u ON c.idpromotor = u.id WHERE upper(c.nombre) like '%".$nombre."%' ORDER BY c.numero limit 8";
 		*/
-            $query ="SELECT n.idnivel, n.nivel, to_char(n.importe,'999,999') as importe, n.numero_pagos, n.fecha_inicio FROM niveles as n WHERE upper(n.nivel::varchar) like '".$nombre."%'  AND fecha_fin is null ORDER BY n.nivel, numero_pagos limit 8";
+            $query ="SELECT n.idnivel, n.nivel, to_char(n.importe,'999,999') as importe, n.numero_pagos, n.fecha_inicio FROM niveles as n WHERE upper(n.nivel::varchar) like '".$nombre."%' AND fecha_fin is null ORDER BY n.nivel, numero_pagos limit 8";
             $niveles = $this->base->querySelect($query, FALSE);
 		$this->validaCode($niveles);	
 	}
@@ -2079,7 +2079,7 @@ function numeroToLetras($num, $fem = false, $dec = true, $pesos=true) {
       public function get_niveles_get() {
 
             $cat_Nivel =  array( array('value'=> '1', 'name'=>'Nivel 01') );
-            for ($i = 2; $i <= 80; $i++) {
+            for ($i = 2; $i <= 100; $i++) {
                   //array_push($catMinutos, array('value'=> $i, 'name'=>$i));
                   $mi_nivel = str_pad((int) $i, 2, "0" , STR_PAD_LEFT);
                   array_push($cat_Nivel, array('value'=> $i, 'name'=>"Nivel ".$mi_nivel));
@@ -2094,7 +2094,7 @@ function numeroToLetras($num, $fem = false, $dec = true, $pesos=true) {
                   array('value'=> '40', 'name'=>'40'),
 				  array('value'=> '45', 'name'=>'45'),
                   array('value'=> '52', 'name'=>'52'),
-                  array('value'=> '72', 'name'=>'72')
+                  array('value'=> '78', 'name'=>'78')
             );            
 
             $cat_tasa =  array(

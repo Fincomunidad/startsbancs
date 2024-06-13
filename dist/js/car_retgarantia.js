@@ -134,20 +134,62 @@ var InputFieldFind = function (_React$Component3) {
     return InputFieldFind;
 }(React.Component);
 
-var Mensaje = function (_React$Component4) {
-    _inherits(Mensaje, _React$Component4);
+var InputFieldNumber = function (_React$Component4) {
+    _inherits(InputFieldNumber, _React$Component4);
+
+    function InputFieldNumber(props) {
+        _classCallCheck(this, InputFieldNumber);
+
+        return _possibleConstructorReturn(this, (InputFieldNumber.__proto__ || Object.getPrototypeOf(InputFieldNumber)).call(this, props));
+    }
+
+    _createClass(InputFieldNumber, [{
+        key: "render",
+        value: function render() {
+            var _this8 = this;
+
+            var cols = (this.props.cols !== undefined ? this.props.cols : "") + " field";
+            return React.createElement(
+                "div",
+                { className: cols },
+                React.createElement(
+                    "label",
+                    null,
+                    this.props.label
+                ),
+                React.createElement(
+                    "div",
+                    { className: "ui labeled input" },
+                    React.createElement(
+                        "div",
+                        { className: "ui label" },
+                        "$"
+                    ),
+                    React.createElement("input", { type: "text", id: this.props.id, name: this.props.id, readOnly: this.props.readOnly, value: this.props.valor, onChange: function onChange(event) {
+                            return _this8.props.onChange(event);
+                        } })
+                )
+            );
+        }
+    }]);
+
+    return InputFieldNumber;
+}(React.Component);
+
+var Mensaje = function (_React$Component5) {
+    _inherits(Mensaje, _React$Component5);
 
     function Mensaje(props) {
         _classCallCheck(this, Mensaje);
 
-        var _this7 = _possibleConstructorReturn(this, (Mensaje.__proto__ || Object.getPrototypeOf(Mensaje)).call(this, props));
+        var _this9 = _possibleConstructorReturn(this, (Mensaje.__proto__ || Object.getPrototypeOf(Mensaje)).call(this, props));
 
-        _this7.state = {
+        _this9.state = {
             icon: "send icon",
             titulo: "Guardar",
             pregunta: "¿Desea enviar el registro?"
         };
-        return _this7;
+        return _this9;
     }
 
     _createClass(Mensaje, [{
@@ -194,32 +236,403 @@ var Mensaje = function (_React$Component4) {
     return Mensaje;
 }(React.Component);
 
-var Captura = function (_React$Component5) {
-    _inherits(Captura, _React$Component5);
+var Calendar = function (_React$Component6) {
+    _inherits(Calendar, _React$Component6);
+
+    function Calendar(props) {
+        _classCallCheck(this, Calendar);
+
+        return _possibleConstructorReturn(this, (Calendar.__proto__ || Object.getPrototypeOf(Calendar)).call(this, props));
+    }
+
+    _createClass(Calendar, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                { className: "ui calendar", id: this.props.name },
+                React.createElement(
+                    "div",
+                    { className: "field" },
+                    React.createElement(
+                        "label",
+                        null,
+                        this.props.label
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "ui input left icon" },
+                        React.createElement("i", { className: "calendar icon" }),
+                        React.createElement("input", { ref: "myCalen", type: "text", name: this.props.name, id: this.props.name, placeholder: "Fecha" })
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Calendar;
+}(React.Component);
+
+/*
+class Calendar extends React.Component{
+    constructor(props){
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+
+    handleChange(e){
+        //console.log(e);
+        //this.props.onChange(e);
+
+    }
+
+    componentDidMount() {
+        $(ReactDOM.findDOMNode(this.refs.myCalen)).on('onChange',this.handleChange);
+    }
+
+    render(){
+        return(
+            <div className="ui calendar" id={this.props.name}>
+                <div className="field">
+                    <label>{this.props.label}</label>
+                    <div className="ui input left icon">
+                        <i className="calendar icon"></i>
+                        <input ref="myCalen" type="text" name={this.props.name} id={this.props.name} value={this.props.valor} placeholder="Fecha" onChange={this.handleChange}/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+}
+*/
+
+var SelectDropDown = function (_React$Component7) {
+    _inherits(SelectDropDown, _React$Component7);
+
+    function SelectDropDown(props) {
+        _classCallCheck(this, SelectDropDown);
+
+        var _this11 = _possibleConstructorReturn(this, (SelectDropDown.__proto__ || Object.getPrototypeOf(SelectDropDown)).call(this, props));
+
+        _this11.state = {
+            value: ""
+        };
+        _this11.handleSelectChange = _this11.handleSelectChange.bind(_this11);
+        return _this11;
+    }
+
+    _createClass(SelectDropDown, [{
+        key: "handleSelectChange",
+        value: function handleSelectChange(event) {
+            this.props.onChange(event);
+        }
+    }, {
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            $(ReactDOM.findDOMNode(this.refs.myDrop)).on('change', this.handleSelectChange);
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            var cols = (this.props.cols !== undefined ? this.props.cols : "") + " field ";
+            var listItems = this.props.valores.map(function (valor) {
+                return React.createElement(
+                    "div",
+                    { className: "item", "data-value": valor.value },
+                    valor.name
+                );
+            });
+            return React.createElement(
+                "div",
+                { className: cols },
+                React.createElement(
+                    "label",
+                    null,
+                    this.props.label
+                ),
+                React.createElement(
+                    "div",
+                    { className: "ui fluid search selection dropdown" },
+                    React.createElement("input", { type: "hidden", ref: "myDrop", value: this.props.valor, name: this.props.id, onChange: this.handleSelectChange }),
+                    React.createElement("i", { className: "dropdown icon" }),
+                    React.createElement(
+                        "div",
+                        { className: "default text" },
+                        "Seleccione"
+                    ),
+                    React.createElement(
+                        "div",
+                        { className: "menu" },
+                        listItems
+                    )
+                )
+            );
+        }
+    }]);
+
+    return SelectDropDown;
+}(React.Component);
+
+var SelectOption = function (_React$Component8) {
+    _inherits(SelectOption, _React$Component8);
+
+    function SelectOption(props) {
+        _classCallCheck(this, SelectOption);
+
+        var _this12 = _possibleConstructorReturn(this, (SelectOption.__proto__ || Object.getPrototypeOf(SelectOption)).call(this, props));
+
+        _this12.state = {
+            value: ""
+        };
+        return _this12;
+    }
+
+    _createClass(SelectOption, [{
+        key: "handleSelectChange",
+        value: function handleSelectChange(event) {
+            this.props.onChange(event);
+        }
+    }, {
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            $(ReactDOM.findDOMNode(this.refs.myCombo)).on('change', this.handleSelectChange.bind(this));
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            var cols = (this.props.cols !== undefined ? this.props.cols : "") + " inline field ";
+
+            var listItems = this.props.valores.map(function (valor) {
+                return React.createElement(
+                    "option",
+                    { value: valor.value },
+                    valor.name
+                );
+            });
+            return React.createElement(
+                "div",
+                { className: cols },
+                React.createElement(
+                    "label",
+                    null,
+                    this.props.label
+                ),
+                React.createElement(
+                    "select",
+                    { className: "ui fluid dropdown", ref: "myCombo", name: this.props.id, id: this.props.id, onChange: this.handleSelectChange.bind(this) },
+                    React.createElement(
+                        "option",
+                        { value: this.props.valor },
+                        "Seleccione"
+                    ),
+                    listItems
+                )
+            );
+        }
+    }]);
+
+    return SelectOption;
+}(React.Component);
+
+/*
+* Imprime los encabezados de una tabla
+*/
+
+
+function Lista(props) {
+    var cadenas = props.enca;
+    var contador = 0;
+    var listItems = cadenas.map(function (encabezado) {
+        return React.createElement(
+            "th",
+            { key: contador++ },
+            encabezado
+        );
+    });
+    return React.createElement(
+        "tr",
+        null,
+        listItems
+    );
+}
+
+var RecordDetalle = function (_React$Component9) {
+    _inherits(RecordDetalle, _React$Component9);
+
+    function RecordDetalle(props) {
+        _classCallCheck(this, RecordDetalle);
+
+        return _possibleConstructorReturn(this, (RecordDetalle.__proto__ || Object.getPrototypeOf(RecordDetalle)).call(this, props));
+    }
+
+    _createClass(RecordDetalle, [{
+        key: "render",
+        value: function render() {
+            //let checked = this.props.registro.activo ? <i className="green checkmark icon"></i> : '' ;
+            return React.createElement(
+                "tr",
+                null,
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.registro.numero
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.registro.fecha_vence
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.registro.capital
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.registro.interes
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.registro.iva
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.registro.garantia
+                ),
+                React.createElement(
+                    "td",
+                    null,
+                    this.props.registro.total
+                )
+            );
+        }
+    }]);
+
+    return RecordDetalle;
+}(React.Component);
+
+var Table = function (_React$Component10) {
+    _inherits(Table, _React$Component10);
+
+    function Table(props) {
+        _classCallCheck(this, Table);
+
+        return _possibleConstructorReturn(this, (Table.__proto__ || Object.getPrototypeOf(Table)).call(this, props));
+    }
+
+    _createClass(Table, [{
+        key: "render",
+        value: function render() {
+            var rows = [];
+            var datos = this.props.datos;
+
+            /*
+            let pageclick = this.props.onClickPage;
+            let configpage = {
+                total_paginas: this.props.datos.total_paginas,
+                pag_actual: this.props.datos.pag_actual
+            }
+            */
+            //    if (datos instanceof Array === false){
+            datos.forEach(function (record) {
+                rows.push(React.createElement(RecordDetalle, { registro: record }));
+            });
+            //    }
+            var estilo = "display: block !important; top: 1814px;";
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "table",
+                    { className: "ui selectable celled red table" },
+                    React.createElement(
+                        "thead",
+                        null,
+                        React.createElement(Lista, { enca: ['Semana', 'Vencimiento', 'Capital', 'Interes', 'IVA', 'Garantia', 'Total'] })
+                    ),
+                    React.createElement(
+                        "tbody",
+                        null,
+                        rows
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Table;
+}(React.Component);
+
+/*
+class CheckBox extends React.Component {
+    constructor(props){
+        super(props);
+    }
+
+    render() {
+        let checked = this.props.valor === '1' ? 'ui checkbox checked': 'ui checkbox';
+        let valchecked = this.props.valor === '1' ? 'true': 'false';
+        return(
+            <div className="field">
+              <label>Seleccione</label>
+              <div className="four fields">
+             <div className="ten wide inline field">
+                <div className={checked} onClick={event => {console.log(event.target.name); this.props.onChange(event)}}>
+                    <input type="checkbox" name={this.props.name} tabindex="0" value={valchecked} class="hidden" onClick={event => {console.log(event.target.name); this.props.onChange(event)}}/>
+                    <label>{this.props.titulo}</label>
+                </div>
+            </div>      
+            </div>      
+            </div>  
+        );
+    }
+}
+*/
+
+var Captura = function (_React$Component11) {
+    _inherits(Captura, _React$Component11);
 
     function Captura(props) {
         _classCallCheck(this, Captura);
 
-        var _this8 = _possibleConstructorReturn(this, (Captura.__proto__ || Object.getPrototypeOf(Captura)).call(this, props));
+        var _this15 = _possibleConstructorReturn(this, (Captura.__proto__ || Object.getPrototypeOf(Captura)).call(this, props));
 
-        _this8.state = {
-            idexiste: "",
+        _this15.state = _defineProperty({
+            blnActivar: true,
+            blnCreditoColmena: false,
+            blnCreditoTemporada: false,
+            idretiro: "", fecha: "", idexiste: "",
+            fecha_pago: "",
+            //edocivil:"", catedocivil: [], 
             edocivil_nombre: "",
+            //idactividad: "", catactividad: [], 
             actividad_nombre: "",
             idacreditado: "", nosocio: "", domicilio: "",
-            acreditado_id: "", acreditado_nombre: "",
-            nocolmena: "", idcolmena: "",
+            acreditado_id: "", cat_colmena_acreditado: [],
+            idpagare: "",
+            nivel: "", monto: 0, catnivel: [],
+            proy_nombre: "", proy_descri: "", proy_lugar: "", proy_observa: "",
+            idproducto: 1, idchecklist: 1, catchklst: [], checklist: [], ischecklist: false,
+            intCheckListReq: 0,
+            nocolmena: "", idcolmena: "", catcolmena: [],
             colmena_nombre: "", colmena_grupo: "", blnGrupo: false,
+            idgrupo: "", //catcolgrupo:[],
             csrf: "", message: "",
             statusmessage: 'ui floating hidden message',
             stepno: 1,
-            blnActivar: true,
             fecha_aprov: null, usuario_aprov: null,
             identify: null, password: null,
-            //amortizaciones: [],
-            boton: 'Enviar', btnAutoriza: 'Autorizar', icons1: 'inverted circular search link icon'
-        };
-        return _this8;
+            amortizaciones: [],
+            boton: 'Enviar', btnAutoriza: 'Autorizar', icons1: 'inverted circular search link icon',
+            idcredito: 0,
+            catCreditos: []
+        }, "fecha", '');
+        return _this15;
     }
 
     _createClass(Captura, [{
@@ -235,10 +648,142 @@ var Captura = function (_React$Component5) {
             var value = target.type === 'checkbox' ? target.checked : target.value;
             var name = target.name;
             this.setState(_defineProperty({}, name, value));
+
+            if (name === "nivel") {
+                this.setState(function (prevState, props) {
+                    return {
+                        monto: prevState.nivel * 1000
+                    };
+                });
+            }
+            //Consultas a cartera
+            /*		
+                    if(name==="idacreditado"){
+                        if (event.target.value != ""){
+                            let link="";
+                            if (name === "idacreditado" ){
+                                link="get_acreditado";            
+                            }
+                            link =`${link}/${event.target.value}`
+                            $.ajax({
+                                url: base_url + '/api/CarteraD1/'+ link ,
+                                type: 'GET',
+                                dataType: 'json',
+                                success:function(response) {
+                                    if (name === "idacreditado"){
+                                        this.asignaAcreditado(response.acreditado[0]);
+                                    }
+                                }.bind(this),
+                                error: function(xhr, status, err) {
+                                    console.log('error');
+                                }.bind(this)
+                            }); 
+                
+            
+                        }
+                    }
+            */
+            if (name === "idcolmena") {
+                var link = "";
+                if (name === "idcolmena") {
+                    link = "get_colmena_acreditados_get";
+                }
+
+                var forma = this;
+                link = link + "/" + event.target.value;
+                var object = {
+                    url: base_url + '/api/GeneralD1/' + link,
+                    type: 'GET',
+                    dataType: 'json'
+                };
+                ajax(object).then(function resolve(response) {
+                    this.setState({
+                        cat_colmena_acreditado: response.result
+                        //idgrupo: ""
+                    });
+                    forma.autoReset();
+                }, function reject(reason) {
+                    var response = validaError(reason);
+                    forma.setState({
+                        csrf: response.newtoken,
+                        message: response.message,
+                        statusmessage: 'ui negative floating message'
+                    });
+                    forma.autoReset();
+                });
+            }
         }
     }, {
         key: "handleSubmit",
-        value: function handleSubmit(event) {}
+        value: function handleSubmit(event) {
+            event.preventDefault();
+            $('.ui.form.formgen').form({
+                inline: true,
+                on: 'blur',
+                fields: {
+                    idacreditado: {
+                        identifier: 'idacreditado',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Seleccione al acreditado'
+                        }]
+                    }
+                }
+            });
+
+            $('.ui.form.formgen').form('validate form');
+            var valida = $('.ui.form.formgen').form('is valid');
+            if (valida == true) {
+                var $form = $('.get.soling form'),
+                    allFields = $form.form('get values'),
+                    token = $form.form('get value', 'csrf_bancomunidad_token');
+                //            let tipo = this.state.boton ==='Enviar' ? 'POST': 'PUT';
+                var forma = this;
+                $('.mini.modal').modal({
+                    closable: false,
+                    onApprove: function onApprove() {
+
+                        var object = {
+                            url: base_url + 'api/CarteraV1/addGtia_acreditado',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                csrf_bancomunidad_token: token,
+                                data: allFields
+                            }
+                        };
+                        ajax(object).then(function resolve(response) {
+                            var idretiro = response.insert_id;
+                            //                            var $form = $('.get.soling form'),
+                            //                            Folio = $form.form('set values', { idretiro: response.insert_id });
+                            forma.setState({
+                                //                                idretiro: idretiro,
+                                //                                idexiste: idretiro,
+                                csrf: response.newtoken,
+                                message: response.message.concat(' ' + response.insert_id.toString()),
+                                statusmessage: 'ui positive floating message ',
+                                boton: 'Enviar'
+                            });
+                            forma.autoReset();
+                        }, function reject(reason) {
+                            var response = validaError(reason);
+                            forma.setState({
+                                csrf: response.newtoken,
+                                message: response.message,
+                                statusmessage: 'ui negative floating message'
+                            });
+                            forma.autoReset();
+                        });
+                    }
+                }).modal('show');
+            } else {
+                this.setState({
+                    message: 'Datos incompletos!',
+                    statusmessage: 'ui negative floating message'
+                });
+                this.autoReset();
+            }
+        }
     }, {
         key: "autoReset",
         value: function autoReset() {
@@ -251,52 +796,430 @@ var Captura = function (_React$Component5) {
             }
         }
     }, {
+        key: "handleSubmitAutoriza2",
+        value: function handleSubmitAutoriza2(event) {
+            event.preventDefault();
+            var valida = true; //$('.ui.form.formaut').form('is valid');
+
+            if (valida == true) {
+                var $form = $('.get.solingaut form'),
+                    allFields = $form.form('get values'),
+                    token = $form.form('get value', 'csrf_bancomunidad_token');
+                var forma = this;
+                $('.test.modal').modal({
+                    closable: false,
+                    onApprove: function onApprove() {
+                        $.ajax({
+                            url: base_url + 'auth/Autho/validateAutUser/10031',
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                csrf_bancomunidad_token: token,
+                                data: allFields
+                            },
+                            success: function (response) {
+                                if (response.status === 'OK') {
+                                    forma.setState({
+                                        csrf: response.newtoken,
+                                        message: response.message,
+                                        statusmessage: 'ui positive floating message ',
+                                        btnAutoriza: 'Autoriza2'
+                                    });
+
+                                    if (valida == true) {
+                                        var $form = $('.get.soling form'),
+                                            allFields = $form.form('get values'),
+                                            token = $form.form('get value', 'csrf_bancomunidad_token');
+                                        var tipo = 'PUT';
+                                        var _forma = this;
+                                        $('.test.modal').modal({
+                                            closable: false,
+                                            onApprove: function onApprove() {
+                                                $.ajax({
+                                                    url: base_url + 'api/CarteraD1/aut_credito',
+                                                    type: tipo,
+                                                    dataType: 'json',
+                                                    data: {
+                                                        csrf_bancomunidad_token: token,
+                                                        data: allFields
+                                                    },
+                                                    success: function (response) {
+                                                        if (response.status === 'OK') {
+                                                            _forma.setState({
+                                                                csrf: response.newtoken,
+                                                                //message: response.message.concat(' ' + response.insert_id.toString()),
+                                                                message: response.message,
+                                                                statusmessage: 'ui positive floating message ',
+                                                                btnAutoriza: 'Autorizar'
+                                                            });
+                                                        }
+                                                    }.bind(this),
+                                                    error: function (xhr, status, err) {
+                                                        if (xhr.status === 404) {
+                                                            _forma.setState({
+                                                                csrf: xhr.responseJSON.newtoken,
+                                                                message: xhr.responseJSON.message,
+                                                                statusmessage: 'ui negative floating message'
+                                                            });
+                                                        } else if (xhr.status === 409) {
+                                                            var cadena = "";
+                                                            var pos = xhr.responseText.indexOf('{"status"');
+                                                            if (pos !== 0) {
+                                                                cadena = xhr.responseText.substring(pos);
+                                                            }
+                                                            var arreglo = JSON.parse(cadena);
+                                                            _forma.setState({
+                                                                csrf: arreglo.newtoken,
+                                                                message: arreglo.message,
+                                                                statusmessage: 'ui negative floating message'
+                                                            });
+                                                        }
+                                                    }.bind(this)
+                                                });
+                                            }
+                                        }).modal('show');
+                                    } else {
+                                        this.setState({
+                                            message: 'Datos incompletos!',
+                                            statusmessage: 'ui negative floating message'
+                                        });
+                                    }
+                                }
+                            }.bind(this),
+                            error: function (xhr, status, err) {
+                                if (xhr.status === 404) {
+                                    forma.setState({
+                                        csrf: xhr.responseJSON.newtoken,
+                                        message: xhr.responseJSON.message,
+                                        statusmessage: 'ui negative floating message'
+                                    });
+                                } else if (xhr.status === 409) {
+                                    var cadena = "";
+                                    var pos = xhr.responseText.indexOf('{"status"');
+                                    if (pos !== 0) {
+                                        cadena = xhr.responseText.substring(pos);
+                                    }
+                                    var arreglo = JSON.parse(cadena);
+                                    forma.setState({
+                                        csrf: arreglo.newtoken,
+                                        message: arreglo.message,
+                                        statusmessage: 'ui negative floating message'
+                                    });
+                                }
+                            }.bind(this)
+
+                        });
+                    }
+                }).modal('show');
+            } else {
+                this.setState({
+                    message: 'Datos incompletos!',
+                    statusmessage: 'ui negative floating message'
+                });
+            }
+        }
+    }, {
+        key: "handleSubmitAutoriza",
+        value: function handleSubmitAutoriza(event) {
+            event.preventDefault();
+
+            var forma = this;
+            /*
+            var object = {
+                url: base_url + 'api/CarteraD1/checklist_completo/' + this.state.idretiro,
+                type: 'GET',
+                dataType: 'json'
+            };
+            ajax(object).then(function resolve(response) {
+                console(response.checklist);
+                if (response.checklist[0] == undefined) {
+                    forma.setState({
+                        ischecklist: true,
+                        checklist: response.checklist,
+                        message: 'El CheckList no ha sido terminado, no es posible autorizar el crédito',
+                        statusmessage: 'ui positive floating message ',
+                    });
+                } else {
+                    forma.setState({
+                        ischecklist: true,
+                        checklist: response.checklist,
+                        message: "Check List terminado 1",
+                        statusmessage: 'ui negative floating message ',
+                    });
+                }
+                forma.autoReset();
+            }, function reject(reason) {
+                var response = validaError(reason);
+                forma.setState({
+                    ischecklist: true,
+                    message: "El CheckList no se ha encontrado en el credito.",
+                    statusmessage: 'ui negative floating message',
+                    icons1: 'inverted circular search link icon', icons2: 'inverted circular search link icon'
+                });
+                forma.clearData();
+                forma.autoReset();
+            });        
+             alert(this.state.ischecklist);
+            */
+            var valida = true;
+            if (valida == true) {
+                var $form = $('.get.soling form'),
+                    allFields = $form.form('get values'),
+                    token = $form.form('get value', 'csrf_bancomunidad_token');
+                var tipo = 'PUT';
+                var _forma2 = this;
+                $('.test.modal').modal({
+                    closable: false,
+                    onApprove: function onApprove() {
+                        $.ajax({
+                            url: base_url + 'api/CarteraD1/aut_credito',
+                            type: tipo,
+                            dataType: 'json',
+                            data: {
+                                csrf_bancomunidad_token: token,
+                                data: allFields
+                            },
+                            success: function (response) {
+                                if (response.status === 'OK') {
+                                    _forma2.setState({
+                                        csrf: response.newtoken,
+                                        //message: response.message.concat(' ' + response.insert_id.toString()),
+                                        message: response.message,
+                                        statusmessage: 'ui positive floating message ',
+                                        btnAutoriza: 'Autorizar'
+                                    });
+                                }
+                            }.bind(this),
+                            error: function (xhr, status, err) {
+                                if (xhr.status === 404) {
+                                    _forma2.setState({
+                                        csrf: xhr.responseJSON.newtoken,
+                                        message: xhr.responseJSON.message,
+                                        statusmessage: 'ui negative floating message'
+                                    });
+                                } else if (xhr.status === 409) {
+                                    var cadena = "";
+                                    var pos = xhr.responseText.indexOf('{"status"');
+                                    if (pos !== 0) {
+                                        cadena = xhr.responseText.substring(pos);
+                                    }
+                                    var arreglo = JSON.parse(cadena);
+                                    _forma2.setState({
+                                        csrf: arreglo.newtoken,
+                                        message: arreglo.message,
+                                        statusmessage: 'ui negative floating message'
+                                    });
+                                }
+                            }.bind(this)
+                        });
+                    }
+                }).modal('show');
+            } /*else {
+                this.setState({
+                    message: mensaje,
+                    statusmessage: 'ui negative floating message'  
+                });
+              }
+              */
+        }
+    }, {
+        key: "handleClickNext",
+        value: function handleClickNext(e) {
+            if (this.state.stepno < 2) {
+                this.setState(function (prevState, props) {
+                    return {
+                        stepno: prevState.stepno + 1
+                    };
+                });
+            }
+        }
+    }, {
+        key: "handleClickPrevious",
+        value: function handleClickPrevious(e) {
+            if (this.state.stepno > 1) {
+                this.setState(function (prevState, props) {
+                    return {
+                        stepno: prevState.stepno - 1
+                    };
+                });
+            }
+        }
+    }, {
         key: "asignaAcreditado",
         value: function asignaAcreditado(data) {
+            //idacreditado, nombre, idsucursal, edocivil, idactividad, direccion}
             var today = new Date();
             var miDir = this.setState({
-                blnActivar: false,
                 nosocio: data.idacreditado,
-
+                nombre: data.nombre,
                 acreditado_nombre: data.nombre,
+                //edocivil: data.edocivil,
+                //idactividad: data.idactividad,
+                idpagare: 'F' + today.getFullYear() + '' + (today.getMonth() + 1) + '' + today.getDate() + '-' + data.idacreditado,
 
                 colmena_nombre: data.col_nombre,
                 colmena_grupo: data.grupo_nombre,
 
-                domicilio: data.direccion == null ? "" : data.direccion
+                actividad_nombre: data.actividad_nombre,
+                edocivil_nombre: data.edocivil_nombre,
+
+                domicilio: data.direccion == null ? "" : data.direccion,
+                idgrupo: data.idgrupo
             });
 
             var $form = $('.get.soling form'),
-                Folio = $form.form('set values', {});
+                Folio = $form.form('set values', {
+                idgrupo: data.idgrupo
+
+                //actividad_nombre: data.actividad_nombre,
+                //edocivil_nombre: data.edocivil_nombre
+                //edocivil: data.edocivil,
+                //idactividad: data.idactividad 
+            });
         }
     }, {
-        key: "asignaSolicitudNew",
-        value: function asignaSolicitudNew() {
+        key: "asignaSolicitudCreditoNew",
+        value: function asignaSolicitudCreditoNew() {
             this.setState({
                 blnActivar: true,
-                domicilio: "",
+                acreditado_nombre: '',
+                idacreditado: "", nosocio: "", domicilio: "",
 
-                acreditado_nombre: "",
-                idacreditado: "",
-                colmena_nombre: "",
-                colmena_grupo: "",
-                idexiste: "",
-                stepno: 1
+                //            fecha: '', idexiste: "", fecha_pago:'',
+                //          edocivil_nombre:"",
+                //        actividad_nombre: "",
+
+                //      idpagare: "",
+                //    nivel: "", monto: 0,
+
+                //  proy_nombre: "", proy_descri: "", proy_lugar: "",
+
+                //   idproducto: 1, idchecklist: 1,
+
+                //         nocolmena:"", //idcolmena: "",
+                colmena_nombre: "", colmena_grupo: "", idgrupo: "", blnGrupo: false,
+                stepno: 1,
+                //nombre: "",
+                //            amortizaciones: [],
+                //            usuario_aprov: null,
+                //           fecha_aprov: null,
+
+                boton: "Enviar"
             });
-            /*
+
             var $form = $('.get.soling form'),
-            Folio = $form.form('set values', { 
-                //blnActivar:true,
-                acreditado_nombre:"",
-                domicilio: "",
-                colmena_nombre: "", 
-                colmena_grupo: ""
+                Folio = $form.form('set values', {
+                //idretiro: "",
+                nombre: "",
+                idcolmena: "",
+                nocolmena: "",
+                nivel: "",
+                idgrupo: "",
+                idchecklist: 1,
+                fecha_aprov: null
             });
-            $('.get.soling .ui.dropdown')
-            .dropdown('clear')
-            ;
-            */
+            $('.get.soling .ui.dropdown').dropdown('clear');
         }
+    }, {
+        key: "asignaSolicitudCredito",
+        value: function asignaSolicitudCredito(data) {
+
+            //let today = new Date();
+            var fechaAlta = moment(data.fecha).format('DD/MM/YYYY');
+            var fechaPago = moment(data.fecha_pago).format('DD/MM/YYYY');
+
+            /*        let fechaAlta = new Date(data.fecha);
+                    fechaAlta= fechaAlta.getDate() + '/' + ( fechaAlta.getMonth() + 1) + '/' + fechaAlta.getFullYear();
+                    let fechaPago = new Date(data.fecha_pago);
+                    fechaPago= fechaPago.getDate() + '/' + ( fechaPago.getMonth() + 1) + '/' + fechaPago.getFullYear();
+              */
+            $('#fecha').val(fechaAlta);
+            $('#fecha_pago').val(fechaPago);
+            this.setState({
+                fecha: fechaAlta,
+                fecha_pago: fechaPago,
+                //idacreditado: data.idacreditado,
+                //nombre: data.nombre, 
+                idpagare: data.idpagare,
+                //           proy_nombre: data.proy_nombre,
+                //            proy_descri: data.proy_descri,
+                //            proy_lugar: data.proy_lugar,
+                //            fecha_aprov: data.fecha_aprov,
+                //            usuario_aprov: data.usuario_aprov,
+                //            actividad_nombre: data.actividad_nombre,
+                //            edocivil_nombre: data.edocivil_nombre,
+                acreditado_nombre: data.nombre,
+                colmena_grupo: data.grupo_nombre,
+                colmena_nombre: data.col_nombre,
+
+                domicilio: data.direccion
+
+            });
+            var $form = $('.get.soling form'),
+                Folio = $form.form('set values', {
+                fecha: fechaAlta,
+                fecha_pago: fechaPago,
+                //idacreditado: data.idacreditado,
+                idacreditado: data.acreditadoid,
+
+                idcolmena: data.idcolmena,
+                //edocivil: data.edocivil,
+                //idactividad: data.idactividad,
+                nivel: data.nivel,
+                idgrupo: data.idgrupo,
+                idchecklist: data.idchecklist,
+
+                actividad_nombre: data.actividad_nombre,
+                edocivil_nombre: data.edocivil_nombre,
+
+                colmena_grupo: data.nomgrupo,
+                colmena_nombre: data.nomcolmena,
+
+                domicilio: data.direccion
+
+            });
+        }
+
+        /*
+            handleFindAcreditado(event,value) {
+                this.setState({idretiro: value});
+                $.ajax({
+                    url: base_url + 'api/CarteraD1/acreditado/'+value,
+                    type: 'GET',
+                    dataType: 'json',
+                    success:function(response) {
+                        if (response.status === 'OK' ){
+                            this.asignaAcreditado(response.acreditado[0]);
+                            this.setState({
+                                message: response.message,
+                                statusmessage: 'ui positive floating message ',
+                                //boton: 'Actualizar'
+                            });
+                        }
+                    }.bind(this),
+                    error: function(xhr, status, err) {
+                        if (xhr.status === 404) {
+                            this.setState({
+                                message: xhr.responseJSON.message,
+                                statusmessage: 'ui negative floating message'  
+                            });
+                        }else if (xhr.status === 409) {
+                            let cadena = "";
+                            let pos = xhr.responseText.indexOf('{"status"');
+                            if (pos !== 0) {
+                                cadena = xhr.responseText.substring(pos);
+                            }
+                            let arreglo = JSON.parse(cadena);
+                            this.setState({
+                                message: arreglo.message,
+                                statusmessage: 'ui negative floating message'  
+                            });
+                        }
+                    }.bind(this)
+                })                
+            }
+        */
+
     }, {
         key: "handleFind",
         value: function handleFind(event, value) {
@@ -307,67 +1230,115 @@ var Captura = function (_React$Component5) {
 
                 var forma = this;
                 var object = {
-                    url: base_url + 'api/CarteraD1/get_acreditado_gar/' + value,
+                    url: base_url + 'api/CarteraV1/acreditado_gtia/' + value,
                     type: 'GET',
                     dataType: 'json'
                 };
                 ajax(object).then(function resolve(response) {
 
-                    forma.asignaAcreditado(response.acreditado[0]);
+                    console.log(response);
+
+                    forma.asignaSolicitudCredito(response.acreditado[0]);
                     forma.setState({
+                        catCreditos: response.creditos,
+                        //                        intCheckListReq: response.checklist[0].total,
+                        //                      amortizaciones: response.amortizaciones,
                         message: response.message,
                         statusmessage: 'ui positive floating message ',
+                        boton: 'Actualizar',
+                        blnActivar: false,
                         icons1: 'inverted circular search link icon'
                     });
-                    /*
-                    forma.setState((prevState, props) => ({
-                        idexiste: idretiro
-                    }));
-                    */
+                    forma.setState(function (prevState, props) {
+                        return {
+                            //                        idexiste: idretiro
+                        };
+                    });
                     forma.autoReset();
                 }, function reject(reason) {
                     var response = validaError(reason);
                     forma.setState({
-                        boton: "Enviar",
                         csrf: response.newtoken,
                         message: response.message,
                         statusmessage: 'ui negative floating message', icons1: 'inverted circular search link icon'
                     });
-                    forma.asignaSolicitudNew();
+                    forma.asignaSolicitudCreditoNew();
                     forma.autoReset();
                 });
             } else {
-                var _forma = this;
-                _forma.setState({
+                var _forma3 = this;
+                _forma3.setState({
                     message: "Ingrese el número de la solicitud de crédito",
                     statusmessage: 'ui negative floating message', icons1: 'inverted circular search link icon'
                 });
-                _forma.autoReset();
+                _forma3.autoReset();
             }
         }
     }, {
         key: "handleButton",
         value: function handleButton(e, value) {
             if (e < 2) {
-                this.asignaSolicitudNew();
+                this.asignaSolicitudCreditoNew();
                 var $form = $('.get.soling form'),
                     Folio = $form.form('set values', {
-                    idacreditado: ""
+                    idretiro: ""
                 });
-            } else if (e == 17) {
-                if (this.state.blnActivar == false) {
+
+                /*          
+                        this.setState((prevState, props) => {
+                            return {message: '', statusmessage: 'ui message hidden'};
+                        });
+                         $('.ui.form').form('clear');
+                         this.setState({tipo: 'F'});
+                         var $form = $('.get.soling form'),
+                            Folio = $form.form('set values', { tipo: 'F'
+                        });
+                */
+            } else if (e > 9 && e < 17) {
+                if (this.state.boton == "Actualizar") {
                     var d = new Date();
-                    var id = this.state.idretiro;
 
                     var link = "";
-                    link = "pdf_retgarantia_acreditado";
+                    if (e === 10) {
+                        link = "pdf_retgarantia_acreditado";
+                    }
                     link = link + "/" + this.state.idacreditado;
+
                     var a = document.createElement('a');
                     a.href = base_url + 'api/ReportD1/' + link;
                     a.target = '_blank';
                     document.body.appendChild(a);
                     a.click();
                     document.body.removeChild(a);
+
+                    /*
+                     $.ajax({
+                            url: base_url + 'api/ReportD1/'+ link,
+                            type: 'GET',
+                            dataType: 'text',
+                            success:function(response) {
+                    //                    var blob=new Blob([response], {type: 'plain/text'});
+                                var blob=new Blob([response], { type: 'application/pdf' });
+                                var link=document.createElement('a');
+                                link.href=window.URL.createObjectURL(blob);
+                                link.target ="_blank";
+                    //<a href="javascript:print('./prueba.pdf')">Imprimir</a> 
+                                link.click();
+                            }.bind(this),
+                            error: function(xhr, status, err) {
+                                if (xhr.status === 404) {
+                                    
+                                }else if (xhr.status === 409) {
+                                    let cadena = "";
+                                    let pos = xhr.responseText.indexOf('{"status"');
+                                    if (pos !== 0) {
+                                        cadena = xhr.responseText.substring(pos);
+                                    }
+                                    let arreglo = JSON.parse(cadena);
+                                }
+                            }.bind(this)
+                        })   
+                        */
                 }
             }
         }
@@ -381,9 +1352,10 @@ var Captura = function (_React$Component5) {
     }, {
         key: "render",
         value: function render() {
-            var _this9 = this;
+            var _this16 = this;
 
             var today = new Date();
+
             return React.createElement(
                 "div",
                 null,
@@ -413,7 +1385,7 @@ var Captura = function (_React$Component5) {
                             React.createElement(
                                 "button",
                                 { className: "ui button", "data-tooltip": "Retiro de garantia PDF" },
-                                React.createElement("i", { className: "file pdf outline icon", onClick: this.handleButton.bind(this, 17) })
+                                React.createElement("i", { className: "file pdf outline icon", onClick: this.handleButton.bind(this, 10) })
                             )
                         ),
                         React.createElement(
@@ -447,7 +1419,7 @@ var Captura = function (_React$Component5) {
                         )
                     ),
                     React.createElement("i", { className: "close icon", onClick: function onClick(event) {
-                            return _this9.setState({ message: '', statusmessage: 'ui message hidden' });
+                            return _this16.setState({ message: '', statusmessage: 'ui message hidden' });
                         } })
                 ),
                 React.createElement(
@@ -462,13 +1434,19 @@ var Captura = function (_React$Component5) {
                             { className: this.state.blnActivar === false ? "disablediv" : "" },
                             React.createElement(
                                 "div",
-                                { className: "two fields" },
-                                React.createElement(InputFieldFind, { icons: this.state.icons1, id: "idacreditado", cols: "two wide", label: "No. acreditado", placeholder: "Buscar", valor: this.state.idacreditado, onChange: this.handleInputChange.bind(this), onClick: this.handleFind.bind(this) })
+                                { className: "fields" },
+                                React.createElement(InputFieldFind, { icons: this.state.icons1, id: "idacreditado", cols: "three wide", mayuscula: "true", name: "idacreditado", valor: this.state.idacreditado, label: "Acreditado", placeholder: "Buscar", onChange: this.handleInputChange.bind(this), onClick: this.handleFind.bind(this) })
                             )
                         ),
                         React.createElement(
                             "div",
-                            { className: "ui mini steps" },
+                            { className: "fields" },
+                            React.createElement(SelectOption, { id: "idcredito", cols: "three wide", label: "Cr\xE9dito", valor: this.state.idcredito, valores: this.state.catCreditos, onChange: this.handleInputChange.bind(this) }),
+                            React.createElement(Calendar, { name: "fecha", label: "Fecha inicial", valor: this.state.fecha, onChange: this.handleInputChange.bind(this) })
+                        ),
+                        React.createElement(
+                            "div",
+                            { className: "ui steps" },
                             React.createElement(Steps, { valor: this.state.stepno, value: "1", icon: "folder outline icon", titulo: "Datos Personales", onClick: this.handleState.bind(this, 1) })
                         ),
                         React.createElement(
@@ -480,7 +1458,7 @@ var Captura = function (_React$Component5) {
                                 React.createElement(
                                     "div",
                                     { className: "two fields" },
-                                    React.createElement(InputField, { id: "acreditado_nombre", label: "Nombre del acreditado:", readOnly: "readOnly", valor: this.state.acreditado_nombre, onChange: this.handleInputChange.bind(this) })
+                                    React.createElement(InputField, { id: "acreditado_nombre", label: "Nombre de la acreditada:", readOnly: "readOnly", valor: this.state.acreditado_nombre, onChange: this.handleInputChange.bind(this) })
                                 )
                             ),
                             React.createElement(
@@ -489,10 +1467,27 @@ var Captura = function (_React$Component5) {
                                 React.createElement(InputField, { id: "colmena_nombre", label: "Colmena:", readOnly: "readOnly", valor: this.state.colmena_nombre, onChange: this.handleInputChange.bind(this) }),
                                 React.createElement(InputField, { id: "colmena_grupo", label: "Grupo:", readOnly: "readOnly", valor: this.state.colmena_grupo, onChange: this.handleInputChange.bind(this) })
                             ),
+                            React.createElement("input", { type: "hidden", name: "idgrupo", value: this.state.idgrupo }),
                             React.createElement(
                                 "div",
                                 { className: "field" },
-                                React.createElement(InputField, { id: "domicilio", mayuscula: "true", label: "Domicilio", valor: this.state.domicilio, onChange: this.handleInputChange.bind(this) })
+                                React.createElement(InputField, { id: "domicilio", mayuscula: "true", label: "domicilio", readOnly: "readOnly", valor: this.state.domicilio, onChange: this.handleInputChange.bind(this) })
+                            ),
+                            React.createElement(
+                                "div",
+                                { className: "ui vertical segment right aligned" },
+                                React.createElement(
+                                    "div",
+                                    { className: "field" },
+                                    React.createElement(
+                                        "button",
+                                        { className: "ui submit bottom primary basic button", type: "submit", name: "action" },
+                                        React.createElement("i", { className: "send icon" }),
+                                        " ",
+                                        this.state.boton,
+                                        " "
+                                    )
+                                )
                             )
                         )
                     )

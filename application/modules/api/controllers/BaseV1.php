@@ -85,7 +85,9 @@ class BaseV1 extends REST_Controller {
 		if ($response['code'] == 409) {
 			$this->response($response, REST_Controller::HTTP_CONFLICT);
 		}else {
-			if ($response['code'] == 200 ) {
+			if ($response['code'] === 201  || $response['code'] == "201" ) {
+				$this->response($response, REST_Controller::HTTP_CREATED);
+			} else if ($response['code'] === 200  || $response['code'] == "200" ) {
 			//retorna el registro exitoso
 				$this->response($response, REST_Controller::HTTP_OK);
 			} else {
@@ -236,212 +238,212 @@ class BaseV1 extends REST_Controller {
 * Encabezado de reporte
 *
 */
-public function headerReport($title){		
-	$order_by = array( array('campo' => 'public.sucursales.idsucursal', 'direccion'=>'asc'));
-	$sucursales = $this->base->selectRecord("public.sucursales", "", "", "", "","", "", $order_by, "","", TRUE);
-	$direc="<table border='0' class='100p'>";
-	$ban = true;
+	public function headerReport($title){		
+		$order_by = array( array('campo' => 'public.sucursales.idsucursal', 'direccion'=>'asc'));
+		$sucursales = $this->base->selectRecord("public.sucursales", "", "", "", "","", "", $order_by, "","", TRUE);
+		$direc="<table border='0' class='100p'>";
+		$ban = true;
 //		htmlspecialchars($user->first_name,ENT_QUOTES,'UTF-8')
-	$tit = " Rayón --- ";
-	foreach($sucursales as $key => $value){
-		if ($this->session->userdata('esquema' ) =="ban."  ){ 	    
-			if ( $ban == true) { 
-				$direc=$direc.'<tr><td class="50p" align="center"><p>'.$value['domicilio'].' '.$value['colonia'].' C.P. '.$value['codpostal'].' '.$value['municipio'].' <br>Tel. '.$value['telefono1'].'</p></td></tr>';	 
-				$ban = false;
-			}			
-		}else {
+		$tit = " Rayón --- ";
+		foreach($sucursales as $key => $value){
+			if ($this->session->userdata('esquema' ) =="ban."  ){ 	    
+				if ( $ban == true) { 
+					$direc=$direc.'<tr><td class="50p" align="center"><p>'.$value['domicilio'].' '.$value['colonia'].' C.P. '.$value['codpostal'].' '.$value['municipio'].' <br>Tel. '.$value['telefono1'].'</p></td></tr>';	 
+					$ban = false;
+				}			
+			}else {
 
-			$direc=$direc.'<tr><td class="50p" align="center" style="padding: 3px">'.$value['domicilio'].', '.$value['colonia'].', C.P. '.$value['codpostal'].', '.$value['municipio'].', Tel. '.$value['telefono1'].'</td></tr>';
+				$direc=$direc.'<tr><td class="50p" align="center" style="padding: 3px">'.$value['domicilio'].', '.$value['colonia'].', C.P. '.$value['codpostal'].', '.$value['municipio'].', Tel. '.$value['telefono1'].'</td></tr>';
+			}
 		}
-	}
-	$direc=$direc.'</tr></table>';
-	$image =""; // '<img class="" src="'.base_url("dist/img/logo.png").'" alt="Logo Empresa" width="100px;" height="auto">';
-	$empresa = $this->getEmpresa();
-	// $this->session->userdata('esquema') =="fin." ? "FINCOMUNIDAD" : "BANCOMUNIDAD";
+		$direc=$direc.'</tr></table>';
+		$image =""; // '<img class="" src="'.base_url("dist/img/logo.png").'" alt="Logo Empresa" width="100px;" height="auto">';
+		$empresa = $this->getEmpresa();
+		// $this->session->userdata('esquema') =="fin." ? "FINCOMUNIDAD" : "BANCOMUNIDAD";
 //                        font-family: arial, helvetica, sans-serif;
-	
-	$html ='<!DOCTYPE html>
-	<html lang="en">
-	<head>
-			<meta http-equiv="Content-type" content="text/html; charset=utf-8" Content-Type:text/html; charset=utf-8 />
-			<title>Reporte</title>
-			 <style  type="text/css">
-				@page {
-					margin: 1rem 1rem 1rem;
-				}
-			
-				body{
-					
-					color: #000;
-					background: #fff;
-					text-align: justify;
-					padding: 0px 40px;
-					font-family: Arial, Helvetica, sans-serif;
-				}
-				.fields {
-					display: flex;
-					-webkit-box-orient: horizontal;
-					-webkit-box-direction: normal;	
-					flex-direction: row;
-					margin: 0 -.5em 1em;										
-				}					
-				.four.fields>.fields {
-					width: 25%;
-				}
-				.titulo{
-					text-align: center;
-					padding:5px 0px;
-					font-size:18px;
-					font-weight: bold;
-					line-height: 50%;
-				}
-				.titulo-data {
-					line-height: 100%;
-				}
-				.subtitulo {
-					text-align: center;
-					padding:3px 0px;
-					font-size:12px;
-					   font-weight: bold;
-				}										
-				.text-space {
-					line-height: 150% !important;                        
-				}
-				.text-title {
-					padding: 0;
-					text-align: left;
-				}					
-				.subtitle {
-					text-align: center;
-					padding:5px 0px;
-					font-size:12px;
-					   font-weight: bold;
-				}
-				.seccion {
-					padding:5px 0px;
-					font-size:12px;
-					   // font-weight: bold; 05-07-20223
-					border: 0px solid black;
-				}					
-				.seccion-right {
-					text-align: right;
-					padding:5px 0px;
-					font-size:12px;
-					   font-weight: bold;
-				}					
-				.seccion-left {
-					text-align: left;
-					padding:5px 0px;
-					font-size:12px;
-					   // font-weight: bold;
-					border: 0px solid black;
-				}					
-				.seccion-center {
-					text-align: center;
-					padding:5px 0px;
-					font-size:12px;
-					   // font-weight: bold; 05-07-2023
-				}	
+		
+		$html ='<!DOCTYPE html>
+		<html lang="en">
+		<head>
+				<meta http-equiv="Content-type" content="text/html; charset=utf-8" Content-Type:text/html; charset=utf-8 />
+                <title>Reporte</title>
+                 <style  type="text/css">
+					@page {
+						margin: 1rem 1rem 1rem;
+					}
+				
+                    body{
+						
+                        color: #000;
+                        background: #fff;
+                        text-align: justify;
+                        padding: 0px 40px;
+						font-family: Arial, Helvetica, sans-serif;
+                    }
+					.fields {
+						display: flex;
+						-webkit-box-orient: horizontal;
+						-webkit-box-direction: normal;	
+						flex-direction: row;
+						margin: 0 -.5em 1em;										
+					}					
+					.four.fields>.fields {
+ 					   width: 25%;
+					}
+                    .titulo{
+                        text-align: center;
+                        padding:5px 0px;
+                        font-size:18px;
+                        font-weight: bold;
+						line-height: 50%;
+                    }
+                    .titulo-data {
+                        line-height: 100%;
+                    }
+                    .subtitulo {
+                        text-align: center;
+                        padding:3px 0px;
+						font-size:12px;
+                       	font-weight: bold;
+                    }										
+                    .text-space {
+                        line-height: 150% !important;                        
+                    }
+                    .text-title {
+                        padding: 0;
+                        text-align: left;
+                    }					
+                    .subtitle {
+                        text-align: center;
+                        padding:5px 0px;
+						font-size:12px;
+                       	font-weight: bold;
+                    }
+                    .seccion {
+						padding:5px 0px;
+						font-size:12px;
+                       	// font-weight: bold; 05-07-20223
+						border: 0px solid black;
+                    }					
+                    .seccion-right {
+						text-align: right;
+                        padding:5px 0px;
+						font-size:12px;
+                       	font-weight: bold;
+                    }					
+                    .seccion-left {
+						text-align: left;
+                        padding:5px 0px;
+						font-size:12px;
+                       	// font-weight: bold;
+						border: 0px solid black;
+                    }					
+                    .seccion-center {
+						text-align: center;
+                        padding:5px 0px;
+						font-size:12px;
+                       	// font-weight: bold; 05-07-2023
+                    }	
 
-				.logo{
-					font-size: 30px;
-				}
-				table, th, td {
-					border: 1px solid black;
-					border-collapse: collapse;
-				}
-				td {
-					text-align: justify;
-					padding-left: 5px;
-					padding-right: 5px;                        
+                    .logo{
+                        font-size: 30px;
+                    }
+                    table, th, td {
+                        border: 1px solid black;
+                        border-collapse: collapse;
+                    }
+                    td {
+                        text-align: justify;
+						padding-left: 5px;
+                        padding-right: 5px;                        
 
-				}
-				table-coldes {
-					width: 70%;
-				}
-				table.100p {
-					width: 100%
-				}
-				table, th.1p {
-					width: 1%;
-				}
-				table, th.10p {
-					width: 10%;
-				}
-				table, th.25p {
-					width: 24%;
-				}
-				table, th.50p {
-					width: 50%;
-				}
-				table, th.75p {
-					width: 75%;
-				}
-				table, td.linea-top {
-					border-top: solid 1px;	
-				}
-				.nombre{
-					border-bottom: 1px solid cornsilk;
-					font-size: 24px;
-					font-family: Courier, "Courier new", monospace;
-					font-style: italic;
-				}
-				.descripcion{
-					font-size: 24px;
-					padding: 30px 0px;
-				}
-				.image-top {
-					top: -15px;
-					position: absolute;
-					float: right;
+                    }
+                    table-coldes {
+                        width: 70%;
+                    }
+					table.100p {
+						width: 100%
+					}
+					table, th.1p {
+						width: 1%;
+					}
+					table, th.10p {
+						width: 10%;
+					}
+					table, th.25p {
+						width: 24%;
+					}
+					table, th.50p {
+						width: 50%;
+					}
+					table, th.75p {
+						width: 75%;
+					}
+					table, td.linea-top {
+						border-top: solid 1px;	
+					}
+                    .nombre{
+                        border-bottom: 1px solid cornsilk;
+                        font-size: 24px;
+                        font-family: Courier, "Courier new", monospace;
+                        font-style: italic;
+                    }
+                    .descripcion{
+                        font-size: 24px;
+                        padding: 30px 0px;
+                    }
+                    .image-top {
+                        top: -15px;
+                        position: absolute;
+                        float: right;
 
-				}
-				.span-right {
-					padding-left: 85px;
-				}
-				.bordos {
-					border: 1px solid black;
-					border-radius: 0;
-					padding: 5px;
-				}
+                    }
+                    .span-right {
+                        padding-left: 85px;
+                    }
+                    .bordos {
+                        border: 1px solid black;
+                        border-radius: 0;
+                        padding: 5px;
+                    }
 
-				.footer {
-					position: fixed;
-					bottom: 0;
-					font-size: 11px;
-					padding-left:40px;
-					color: #73879C;
+                    .footer {
+                        position: fixed;
+                        bottom: 0;
+                        font-size: 11px;
+                        padding-left:40px;
+                        color: #73879C;
 
-				}
-				.encatitulo {
-					background-color: #C0D5DA;
-					padding: 2px;
-					text-align: center;
-					font-family: Arial, Helvetica, sans-serif;
-				}
-				.page_break {
-					page-break-before: always;
-				}					
+					}
+					.encatitulo {
+						background-color: #C0D5DA;
+						padding: 2px;
+						text-align: center;
+						font-family: Arial, Helvetica, sans-serif;
+					}
+					.page_break {
+						page-break-before: always;
+					}					
+                </style>
 			</style>
-		</style>
-	</head>
-	<body>';
-	$html .= '<div class="footer"><em>Impreso </em></div>';
-	$html .= '<div class="titulo">'.$empresa.'</div>';
-	
-	$html .= $this->getSubtitulo();
-	$html .= $this->getLogo(60);
-	
+		</head>
+		<body>';
+		$html .= '<div class="footer"><em>Impreso </em></div>';
+		$html .= '<div class="titulo">'.$empresa.'</div>';
+		
+		$html .= $this->getSubtitulo();
+		$html .= $this->getLogo(60);
+		
 //		$html .= '<div style ="top: -10px;position: absolute; float:right;"><img src="'.base_url("dist/img/logofin.png").'" height="50px" alt=""></div>';		
-	
+		
 //		$html = $html.'<div class="image-top"><img src="'.base_url("dist/img/logo.png").'" height="50px" alt=""></div>';
-	$html .= '<div class="titulo-data" style="font-size:10px;">';
-	$html .= $direc;
-	$html .= '	   <p>'.$title.'</p>';
-	$html .= '	   <hr>';
-	$html .= '</div>';
-	return $html;		
-}
+		$html .= '<div class="titulo-data" style="font-size:10px;">';
+		$html .= $direc;
+		$html .= '	   <p>'.$title.'</p>';
+		$html .= '	   <hr>';
+		$html .= '</div>';
+		return $html;		
+	}
 
 
 
@@ -900,11 +902,11 @@ function Print($nomov){
 
 
 
-
 	}
+	
+	
 
-
-	function validateAutUser($user, $password) {
+    function validateAutUser($user, $password) {
 		$response = array("status"=>"ERROR",
 			"code" => "404",			 
 			"message"=> "Contraseña inválida!",
@@ -925,5 +927,8 @@ function Print($nomov){
 		return $response;
 
 	 }
+	
+	
+
 
 }

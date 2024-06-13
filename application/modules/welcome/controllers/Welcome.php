@@ -52,10 +52,7 @@ class Welcome extends MX_Controller
 			$obtener = $this->basec->cajaEquipo();
 			$this->session->set_userdata('idcaja', '');
 			
-			// if (sizeof($obtener) == 1){
-				if (is_array($obtener) && count($obtener) == 1) {
-				
-				
+			if (sizeof($obtener) == 1){
 //				if ($_SERVER['REMOTE_ADDR'] == $obtener[0]['ip']) {
 //Habilitar esta linea por SEGURIDAD					
 //				if ($_SERVER['REMOTE_ADDR'] == $obtener[0]['ip']  && $_SERVER['REMOTE_ADDR'] != '::1' ) {
