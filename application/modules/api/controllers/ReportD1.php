@@ -4241,7 +4241,7 @@ public function pdf_col_horario_get(){
 		$title = array("Ruta", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado");
 		$tabla = '';
 		if ($hora){
-			$tabla.= $this->table_col_horario($title, $hora, '1');
+			$tabla.= $this->table_col_horariog($title, $hora, '1');
 		}
 		$header = $this->headerReport('');
 		$html = $header;
@@ -4322,7 +4322,7 @@ public function pdf_col_horario_get(){
 		$title = array("Ruta", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado");
 		$tabla = '';
 		if ($hora){
-			$tabla.= $this->table_col_horario($title, $hora, '0');
+			$tabla.= $this->table_col_horario_cap($title, $hora, '0');
 		}
 		$header = $this->headerReport('');
 		$html = $header;
@@ -4409,7 +4409,87 @@ public function pdf_col_horario_get(){
 		}
 		$html.='</table>';
 		return $html;
-	}	
+	}
+
+	public function table_col_horariog($title, $data, $global) {
+		if ($global==='2'){
+			$columnas=4;
+		}else{
+			$columnas=3;
+		}
+		$html='';
+		$html.='<table style="width:100%" >';
+		$html.='  <tr style="height:20px; background:lightblue;">';
+		$html.='    <th span=2>RUTA</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">LUNES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">MARTES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">MIERCOLES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">JUEVES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">VIERNES</th>';
+		$html.='  </tr>';
+		$capital=0;
+		$numero=0;
+		$fila='';
+		foreach($data as $key => $value) {
+			$html.='  <tr">';						
+			if ($numero != $value['numero']){
+				$numero = $value['numero'];
+				$html.='  <td style="border-bottom:0px;"><b>'.$value['nombre'].'</b></td>';
+				$fila = '1';
+			}else{
+				$html.='  <td style="border-bottom:0px; border-top:0px;"></td>';				
+				$fila = '';
+			}						
+			$html.= $this->col_horario_diag($value['lunes'], $fila, $global);			
+			$html.= $this->col_horario_diag($value['martes'], $fila, $global);
+			$html.= $this->col_horario_diag($value['miercoles'], $fila, $global);
+			$html.= $this->col_horario_diag($value['jueves'], $fila, $global);
+			$html.= $this->col_horario_diag($value['viernes'], $fila, $global);
+			$html.='  </tr>';
+		}
+		$html.='</table>';
+		return $html;
+	}
+	
+	public function table_col_horario_cap($title, $data, $global) {
+		if ($global==='1'){
+			$columnas=4;
+		}else{
+			$columnas=3;
+		}
+		$html='';
+		$html.='<table style="width:100%" >';
+		$html.='  <tr style="height:20px; background:lightblue;">';
+		$html.='    <th span=2>RUTA</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">LUNES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">MARTES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">MIERCOLES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">JUEVES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">VIERNES</th>';
+		$html.='  </tr>';
+		$capital=0;
+		$numero=0;
+		$fila='';
+		foreach($data as $key => $value) {
+			$html.='  <tr">';						
+			if ($numero != $value['numero']){
+				$numero = $value['numero'];
+				$html.='  <td style="border-bottom:0px;"><b>'.$value['nombre'].'</b></td>';
+				$fila = '1';
+			}else{
+				$html.='  <td style="border-bottom:0px; border-top:0px;"></td>';				
+				$fila = '';
+			}						
+			$html.= $this->col_horario_dia_cap($value['lunes'], $fila, $global);			
+			$html.= $this->col_horario_dia_cap($value['martes'], $fila, $global);
+			$html.= $this->col_horario_dia_cap($value['miercoles'], $fila, $global);
+			$html.= $this->col_horario_dia_cap($value['jueves'], $fila, $global);
+			$html.= $this->col_horario_dia_cap($value['viernes'], $fila, $global);
+			$html.='  </tr>';
+		}
+		$html.='</table>';
+		return $html;
+	}
 	
 	public function table_col_horario2($title, $data, $global)
 	{
@@ -4452,47 +4532,111 @@ public function pdf_col_horario_get(){
 		return $html;
 	}
 
-	public function table_col_horariog($title, $data, $global) {
-		if ($global==='1'){
-			$columnas=4;
-		}else{
-			$columnas=3;
+
+	private function col_horario_dia($data, $fila, $global){
+		$miHtml = '';
+		$border = '';
+		$rowColor = '';  // Color de fondo para toda la fila
+	
+		// Determina el estilo de borde
+		if ($fila === ''){
+			$border = "border-bottom:0px; border-top:0px;";
+		} else {
+			$border = "border-bottom:0px;";
 		}
-		$html='';
-		$html.='<table style="width:100%" >';
-		$html.='  <tr style="height:20px; background:lightblue;">';
-		$html.='    <th span=2>RUTA</th>';
-		$html.='    <th colspan="'.$columnas.'" align="center">LUNES</th>';
-		$html.='    <th colspan="'.$columnas.'" align="center">MARTES</th>';
-		$html.='    <th colspan="'.$columnas.'" align="center">MIERCOLES</th>';
-		$html.='    <th colspan="'.$columnas.'" align="center">JUEVES</th>';
-		$html.='    <th colspan="'.$columnas.'" align="center">VIERNES</th>';
-		$html.='  </tr>';
-		$capital=0;
-		$numero=0;
-		$fila='';
-		foreach($data as $key => $value) {
-			$html.='  <tr">';						
-			if ($numero != $value['numero']){
-				$numero = $value['numero'];
-				$html.='  <td style="border-bottom:0px;"><b>'.$value['nombre'].'</b></td>';
-				$fila = '1';
-			}else{
-				$html.='  <td style="border-bottom:0px; border-top:0px;"></td>';				
-				$fila = '';
-			}						
-			$html.= $this->col_horario_diag($value['lunes'], $fila, $global);			
-			$html.= $this->col_horario_diag($value['martes'], $fila, $global);
-			$html.= $this->col_horario_diag($value['miercoles'], $fila, $global);
-			$html.= $this->col_horario_diag($value['jueves'], $fila, $global);
-			$html.= $this->col_horario_diag($value['viernes'], $fila, $global);
-			$html.='  </tr>';
+	
+		if ($data != ''){
+			$parts = explode('|', $data, 6);
+	
+			if (sizeof($parts) > 5){
+				$nombre = $parts[1].' ('.$parts[4].', $'.number_format($parts[5], 2, '.', ',').')';
+			} else {
+				$nombre = $parts[1].' ('.$parts[4].')';
+			}
+	
+			// Buscar todos los números dentro de los paréntesis y determinar el color de la fila
+			if (preg_match('/\((\d+)\)/', $nombre, $matches)) {
+				$number = (int)$matches[1];
+	
+				// Determinar el color de fondo de la fila basado en el número
+				if ($number < 10) {
+					$rowColor = 'background-color: #FF5733;'; // Rojo claro
+				} elseif ($number >= 10 && $number < 16) {
+					$rowColor = 'background-color: #FFEB99;'; // Naranja claro
+				} elseif ($number >= 16) {
+					$rowColor = 'background-color: #DFF2BF;'; // Verde claro
+				}
+			}
+	
+	
+			// Construir el HTML con el estilo de fondo aplicado a la fila
+			$miHtml .= '  <td align="right" style="width:15px; border-right:0px; ' . $border . $rowColor . '">' . $parts[0] . '</td>';
+			$miHtml .= '  <td style="border-left:0px; border-right:0px; ' . $border . $rowColor . '">' . $nombre . '</td>';
+			$miHtml .= '  <td style="width:15px; border-left:0px; ' . $border . $rowColor . '">' . $parts[2] . '</td>';
+		} else {
+			// Si $data está vacío, se rellena con el color blanco
+			$emptyColor = 'background-color: #FFFFFF;'; // Color blanco
+			$miHtml .= '  <td align="right" style="width:15px; border-right:0px;' . $border . $emptyColor . '">&nbsp;</td>';
+			$miHtml .= '  <td style="border-left:0px; border-right:0px; ' . $border . $emptyColor . '">&nbsp;</td>';
+			$miHtml .= '  <td style="width:15px; border-left:0px; ' . $border . $emptyColor . '">&nbsp;</td>';
 		}
-		$html.='</table>';
-		return $html;
+	
+		return $miHtml;
 	}
 
-private function col_horario_dia($data, $fila, $global){
+	private function col_horario_diag($data, $fila, $global) {
+		$miHtml = '';
+		$border = '';
+		$rowColor = '';  // Color de fondo para toda la fila
+	
+		// Determina el estilo de borde
+		if ($fila === '') {
+			$border = "border-bottom:0px; border-top:0px;";
+		} else {
+			$border = "border-bottom:0px;";
+		}
+	
+		if ($data != '') {
+			$parts = explode('|', $data, 6);
+	
+			if (sizeof($parts) > 5) {
+				$nombre = $parts[1] . ' (' . $parts[4] . ', $' . number_format($parts[5], 2, '.', ',') . ')';
+			} else {
+				$nombre = $parts[1] . ' (' . $parts[4] . ')';
+			}
+	
+			// Buscar el primer número dentro de los paréntesis y determinar el color de la fila
+			if (preg_match('/\((\d+)\)/', $nombre, $matches)) {
+				$number = (int)$matches[1];
+	
+				// Determinar el color de fondo de la fila basado en el número
+				if ($number < 10) {
+					$rowColor = 'background-color: #FF5733;'; // Rojo claro
+				} elseif ($number >= 10 && $number < 16) {
+					$rowColor = 'background-color: #FFEB99;'; // Naranja claro
+				} elseif ($number >= 16) {
+					$rowColor = 'background-color: #DFF2BF;'; // Verde claro
+				}
+			}
+	
+			// Construir el HTML con el estilo de fondo aplicado a la fila
+			$miHtml .= '  <td align="right" style="width:15px; border-right:0px; ' . $border . $rowColor . '">' . $parts[0] . '</td>';
+			$miHtml .= '  <td style="border-left:0px; border-right:0px; ' . $border . $rowColor . '">' . $nombre . '</td>';
+			$miHtml .= '  <td style="width:15px; border-left:0px; ' . $border . $rowColor . '">' . $parts[2] . '</td>';
+		} else {
+			// Si $data está vacío, se rellena con el color blanco
+			$emptyColor = 'background-color: #FFFFFF;'; // Color blanco
+			$miHtml .= '  <td align="right" style="width:15px; border-right:0px;' . $border . $emptyColor . '">&nbsp;</td>';
+			$miHtml .= '  <td style="border-left:0px; border-right:0px; ' . $border . $emptyColor . '">&nbsp;</td>';
+			$miHtml .= '  <td style="width:15px; border-left:0px; ' . $border . $emptyColor . '">&nbsp;</td>';
+		}
+	
+		return $miHtml;
+	}
+	
+	
+
+	private function col_horario_dia_cap($data, $fila, $global){
 		$miHtml='';
 		$border='';
 		$rowColor = '';
@@ -4520,9 +4664,9 @@ private function col_horario_dia($data, $fila, $global){
 					if ($number < 10) {
 						$rowColor = 'background-color: #FF5733;'; // Rojo claro
 					} elseif ($number >= 10 && $number < 16) {
-						$rowColor = 'background-color: #FFDAB9;'; // Naranja claro
+						$rowColor = 'background-color: #FFEB99;'; // Naranja claro
 					} elseif ($number >= 16) {
-						$rowColor = 'background-color: #C8E6C9;'; // Verde claro
+						$rowColor = 'background-color: #DFF2BF;'; // Verde claro
 					}
 				}
 			}
@@ -4568,9 +4712,9 @@ private function col_horario_dia($data, $fila, $global){
                 if ($number < 10) {
                     $rowColor = 'background-color: #FF5733;'; // Rojo claro
                 } elseif ($number >= 10 && $number < 16) {
-                    $rowColor = 'background-color: #FFDAB9;'; // Naranja claro
+                    $rowColor = 'background-color: #FFEB99;'; // Naranja claro
                 } elseif ($number >= 16) {
-                    $rowColor = 'background-color: #C8E6C9;'; // Verde claro
+                    $rowColor = 'background-color: #DFF2BF;'; // Verde claro
                 }
             }
         }
@@ -4592,54 +4736,6 @@ private function col_horario_dia($data, $fila, $global){
 		}
 		$miHtml.='  <td style="border-left:0px; border-right:0px; '.$border .$rowColor.'"></td>';
 		$miHtml.='  <td style="width:15px; border-left:0px; '.$border .$rowColor.'"></td>';
-	}
-	return $miHtml;
-}
-
-	private function col_horario_diag($data, $fila, $global){
-	$miHtml='';
-	$border='';
-	$rowColor = '';
-
-	if ($fila===''){
-		$border= "border-bottom:0px; border-top:0px;";
-	}else{
-		$border= "border-bottom:0px;";
-	}
-
-	if ($data!=''){
-		$parts = explode('|', $data,6);
-		if (sizeof($parts)>5){
-			$nombre= $parts[1].' ('.$parts[4].', $'.number_format($parts[5], 2, '.', ',').')';
-		}else{
-			$nombre= $parts[1].' ('.$parts[4].')';
-		}
-
-		// Aplicar colores a toda la línea basada en los números entre paréntesis justo antes de la coma
-		if (preg_match_all('/\((\d+),/', $nombre, $matches)) {
-			foreach ($matches[1] as $number) {
-				$number = (int)$number; // Convertir a entero
-
-				// Determinar el color de la fila basado en el rango del número
-				if ($number < 10) {
-					$rowColor = 'background-color: #FF5733;'; // Rojo claro
-				} elseif ($number >= 10 && $number < 16) {
-					$rowColor = 'background-color: #FFDAB9;'; // Naranja claro
-				} elseif ($number >= 16) {
-					$rowColor = 'background-color: #C8E6C9;'; // Verde claro
-				}
-			}
-		}
-
-		$miHtml.='  <td align="right" style="width:15px; border-right:0px;'.$border .$rowColor.'" >'.$parts[0].'</td>';
-		$miHtml.='  <td style="border-left:0px; border-right:0px; '.$border .$rowColor.'">'.$nombre.'</td>';
-		$miHtml.='  <td style="width:15px; border-left:0px; '.$border .$rowColor.'">'.$parts[2].'</td>';
-	}else{
-		// Si $data está vacío, se rellena con el color correspondiente
-		$emptyColor = 'background-color: #FFFFFF;'; // Color blanco
-		$miHtml.='  <td align="right" style="width:15px; border-right:0px;'.$border .$emptyColor.'">&nbsp;</td>';
-		$miHtml.='  <td style="border-left:0px; border-right:0px; '.$border .$emptyColor.'">&nbsp;</td>';
-		$miHtml.='  <td style="width:15px; border-left:0px; '.$border .$emptyColor.'">&nbsp;</td>';
 	}
 	return $miHtml;
 }
