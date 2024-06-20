@@ -4147,44 +4147,71 @@ class ReportD1 extends CarteraD1
 	}	
 
 
-public function pdf_col_horario_get(){
-		$idPromotor= $this->uri->segment(4);
-		$sucursal ='ZIMATLAN';		
-		if ($this->session->userdata('sucursal_id')==='02'){
-			$sucursal ='OAXACA';
+	public function pdf_col_horario_get() {
+		$idPromotor = $this->uri->segment(4);
+		$sucursal = 'ZIMATLAN';
+		
+		if ($this->session->userdata('sucursal_id') === '02') {
+			$sucursal = 'OAXACA';
 		}
-		if ($this->session->userdata('esquema')==="fin."){
+		
+		$esquema = $this->session->userdata('esquema');
+		$empresa = '';
+		
+		if ($esquema === "fin.") {
 			$empresa = 'F';
-		}elseif ($this->session->userdata('esquema')==="ban."){
+		} elseif ($esquema === "ban.") {
 			$empresa = 'B';
-		}elseif ($this->session->userdata('esquema')==="imp."){
+		} elseif ($esquema === "imp.") {
 			$empresa = 'I';
-		}else{
-			$empresa = '';
 		}
-		$hora = $this->base->querySelect("SELECT numero, nombre, ruta, hora, lunes, martes, miercoles, jueves, viernes, sabado 
-											FROM col.get_colmena_horario('".$this->session->userdata('sucursal_id')."', '".$empresa."',".$idPromotor.") WHERE numero>1;", TRUE);
-		$title = array("Ruta", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado");
+		
+		$query = "SELECT numero, nombre, ruta, hora, lunes, martes, miercoles, jueves, viernes, sabado 
+				  FROM col.get_colmena_horario('".$this->session->userdata('sucursal_id')."', '".$empresa."',".$idPromotor.") 
+				  WHERE numero > 1;";
+		$horarios = $this->base->querySelect($query, TRUE);
+		
+		$title = array("Ruta", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
 		$tabla = '';
-		if ($hora){
-			$tabla.= $this->table_col_horario($title, $hora, '0');
+		
+		if ($horarios) {
+			// Filtrar filas vacías
+			$horariosFiltrados = array_filter($horarios, function($fila) {
+				return !empty($fila['ruta']) || !empty($fila['lunes']) || !empty($fila['martes']) || 
+					   !empty($fila['miércoles']) || !empty($fila['jueves']) || !empty($fila['viernes']) || 
+					   !empty($fila['sábado']);
+			});
+			
+			// Solo generar tabla si hay filas filtradas
+			if (!empty($horariosFiltrados)) {
+				$tabla .= $this->table_col_horario($title, $horariosFiltrados, '0');
+			}
 		}
+		
 		$header = $this->headerReport('');
 		$html = $header;
-		$html = $header.'
-			<div style="font-size:11px;">
-			<h3 align="center">HORARIO SUCURSAL: '.$sucursal.' </h3>';        
-		$html.='<div style="font-size:8px;">';
-        $html.=$tabla;
-		$html.='</div>';
-		$html.='<br><br>';
-		$html.='
-		</div>
-		</body>
-		</html>
-		';
-		$this->printReport ($html, 'landscape');
+		
+		if (!empty($tabla)) {
+			$html .= '
+				<div style="font-size:11px;">
+					<h3 align="center">HORARIO SUCURSAL: '.$sucursal.' </h3>
+					<div style="font-size:8px;">' . $tabla . '</div>
+					<br><br>
+				</div>
+			</body>
+			</html>';
+			
+			$this->printReport($html, 'landscape');
+		} else {
+			// Manejo alternativo si no hay datos que mostrar
+			$html .= '<div style="font-size:11px; text-align:center;">No hay información de horarios disponible para mostrar.</div>
+			</body>
+			</html>';
+			
+			$this->printReport($html, 'portrait');
+		}
 	}
+	
 	
 	public function pdf_col_horario2_get()
 	{
@@ -4302,74 +4329,134 @@ public function pdf_col_horario_get(){
 		$this->printReport ($html, 'landscape');
 	}
 
-	public function pdf_col_horariocap_get(){
-		$idPromotor= $this->uri->segment(4);
-		$sucursal ='ZIMATLÁN';		
-		if ($this->session->userdata('sucursal_id')==='02'){
-			$sucursal ='OAXACA';
+	public function pdf_col_horariocap_get() {
+		// Obtener el ID del promotor desde la URI
+		$idPromotor = $this->uri->segment(4);
+	
+		// Determinar la sucursal
+		$sucursal = 'ZIMATLÁN';
+		if ($this->session->userdata('sucursal_id') === '02') {
+			$sucursal = 'OAXACA';
 		}
-		if ($this->session->userdata('esquema')==="fin."){
+	
+		// Determinar el esquema de la empresa
+		$esquema = $this->session->userdata('esquema');
+		$empresa = '';
+		if ($esquema === "fin.") {
 			$empresa = 'F';
-		}elseif ($this->session->userdata('esquema')==="ban."){
+		} elseif ($esquema === "ban.") {
 			$empresa = 'B';
-		}elseif ($this->session->userdata('esquema')==="imp."){
+		} elseif ($esquema === "imp.") {
 			$empresa = 'I';
-		}else{
-			$empresa = '';
 		}
-		$hora = $this->base->querySelect("SELECT numero, nombre, ruta, hora, lunes, martes, miercoles, jueves, viernes, sabado 
-											FROM col.get_colmena_horario_cap('".$this->session->userdata('sucursal_id')."', '".$empresa."',".$idPromotor.") WHERE numero>1;", TRUE);
-		$title = array("Ruta", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado");
+	
+		// Consulta para obtener el horario
+		$query = "SELECT numero, nombre, ruta, hora, lunes, martes, miercoles, jueves, viernes, sabado 
+				  FROM col.get_colmena_horario_cap('".$this->session->userdata('sucursal_id')."', '".$empresa."', ".$idPromotor.") 
+				  WHERE numero > 1;";
+		$horarios = $this->base->querySelect($query, TRUE);
+	
+		// Títulos de la tabla
+		$title = array("Ruta", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
 		$tabla = '';
-		if ($hora){
-			$tabla.= $this->table_col_horario_cap($title, $hora, '0');
+	
+		if ($horarios) {
+			// Filtrar filas que tienen información relevante
+			$horariosFiltrados = array_filter($horarios, function($fila) {
+				return !empty($fila['ruta']) || !empty($fila['lunes']) || !empty($fila['martes']) ||
+					   !empty($fila['miercoles']) || !empty($fila['jueves']) || !empty($fila['viernes']) ||
+					   !empty($fila['sabado']);
+			});
+	
+			// Generar tabla solo si hay filas filtradas
+			if (!empty($horariosFiltrados)) {
+				$tabla .= $this->table_col_horario_cap($title, $horariosFiltrados, '0');
+			}
 		}
+	
+		// Generar el header del reporte
 		$header = $this->headerReport('');
 		$html = $header;
-		$html = $header.'
-			<div style="font-size:11px;">
-			<h3 align="center">HORARIO SUCURSAL: '.$sucursal.' </h3>';        
-		$html.='<div style="font-size:8px;">';
-        $html.=$tabla;
-		$html.='</div>';
-		$html.='<br><br>';
-		$html.='
-		</div>
-		</body>
-		</html>
-		';
-		$this->printReport ($html, 'landscape');
+	
+		if (!empty($tabla)) {
+			// Generar HTML completo solo si hay datos útiles
+			$html .= '
+				<div style="font-size:11px;">
+					<h3 align="center">HORARIO SUCURSAL: '.$sucursal.' </h3>
+					<div style="font-size:8px;">' . $tabla . '</div>
+					<br><br>
+				</div>
+			</body>
+			</html>';
+			
+			$this->printReport($html, 'landscape');
+		} else {
+			// Manejo alternativo si no hay datos que mostrar
+			$html .= '<div style="font-size:11px; text-align:center;">No hay información de horarios disponible para mostrar.</div>
+			</body>
+			</html>';
+			
+			$this->printReport($html, 'portrait');
+		}
 	}
+	
 
-	public function pdf_col_horariocapg_get(){
-		$idPromotor= $this->uri->segment(4);
-		$sucursal ='ZIMATLAN';		
-		if ($this->session->userdata('sucursal_id')==='02'){
-			$sucursal ='OAXACA';
+	public function pdf_col_horariocapg_get() {
+		$idPromotor = $this->uri->segment(4);
+		$sucursal = 'ZIMATLAN';
+		if ($this->session->userdata('sucursal_id') === '02') {
+			$sucursal = 'OAXACA';
 		}
-		$hora = $this->base->querySelect("SELECT numero, nombre, ruta, hora, lunes, martes, miercoles, jueves, viernes, sabado 
-											FROM col.get_colmena_horario_capg('".$this->session->userdata('sucursal_id')."',".$idPromotor.") WHERE numero>1;", TRUE);
-		$title = array("Ruta", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado");
+	
+		// Consulta para obtener el horario
+		$query = "SELECT numero, nombre, ruta, hora, lunes, martes, miercoles, jueves, viernes, sabado 
+				  FROM col.get_colmena_horario_capg('".$this->session->userdata('sucursal_id')."', ".$idPromotor.") 
+				  WHERE numero > 1;";
+		$horarios = $this->base->querySelect($query, TRUE);
+	
+		$title = array("Ruta", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
 		$tabla = '';
-		if ($hora){
-			$tabla.= $this->table_col_horario2($title, $hora, '1');
+	
+		if ($horarios) {
+			$horariosFiltrados = array_filter($horarios, function($fila) {
+				return !empty($fila['ruta']) || !empty($fila['lunes']) || !empty($fila['martes']) ||
+				!empty($fila['miercoles']) || !empty($fila['jueves']) || !empty($fila['viernes']) ||
+				!empty($fila['sabado']);
+			});
+
+			if (!empty($horariosFiltrados)) {
+				$tabla .= $this->table_col_horario2($title, $horariosFiltrados, '1');
+			}
 		}
+	
+		// Generar el header del reporte
 		$header = $this->headerReport('');
 		$html = $header;
-		$html = $header.'
-			<div style="font-size:11px;">
-			<h3 align="center">HORARIO SUCURSAL: '.$sucursal.' </h3>';        
-		$html.='<div style="font-size:8px;">';
-        $html.=$tabla;
-		$html.='</div>';
-		$html.='<br><br>';
-		$html.='
-		</div>
-		</body>
-		</html>
-		';
-		$this->printReport ($html, 'landscape');
-	}		
+	
+		if (!empty($tabla)) {
+			// Generar HTML completo solo si hay datos útiles
+			$html .= '
+				<div style="font-size:11px;">
+					<h3 align="center">HORARIO SUCURSAL: '.$sucursal.' </h3>
+					<div style="font-size:8px;">' . $tabla . '</div>
+					<br><br>
+				</div>
+			</body>
+			</html>';
+			
+			// Imprimir reporte en orientación horizontal
+			$this->printReport($html, 'landscape');
+		} else {
+			// Manejo alternativo si no hay datos que mostrar
+			$html .= '<div style="font-size:11px; text-align:center;">No hay información de horarios disponible para mostrar.</div>
+			</body>
+			</html>';
+			
+			// Imprimir reporte en orientación vertical
+			$this->printReport($html, 'portrait');
+		}
+	}
+			
 
 	public function table_col_horario($title, $data, $global) {
 		if ($global==='1'){
@@ -4499,15 +4586,15 @@ public function pdf_col_horario_get(){
 			$columnas = 3;
 		}
 		$html = '';
-		$html .= '<table style="width:100%; border-collapse: collapse; border: 1px solid black;">';  // Añadido: borde en la tabla
+		$html .= '<table style="width:100%;">';  // Añadido: borde en la tabla
 		$html .= '  <tr style="height:20px; background:lightblue;">';
 		$html .= '    <th span=2>RUTA</th>';  // Añadido: borde en la celda
-		$html .= '    <th style="border: 1px solid black;" colspan="' . $columnas . '" align="center">LUNES</th>';
-		$html .= '    <th style="border: 1px solid black;" colspan="' . $columnas . '" align="center">MARTES</th>';
-		$html .= '    <th style="border: 1px solid black;" colspan="' . $columnas . '" align="center">MIERCOLES</th>';
-		$html .= '    <th style="border: 1px solid black;" colspan="' . $columnas . '" align="center">JUEVES</th>';
-		$html .= '    <th style="border: 1px solid black;" colspan="' . $columnas . '" align="center">VIERNES</th>';
-		$html .= '  </tr>';
+		$html.='    <th colspan="'.$columnas.'" align="center">LUNES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">MARTES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">MIERCOLES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">JUEVES</th>';
+		$html.='    <th colspan="'.$columnas.'" align="center">VIERNES</th>';
+		$html.='  </tr>';
 		$capital = 0;
 		$numero = 0;
 		$fila = '';
@@ -4515,7 +4602,7 @@ public function pdf_col_horario_get(){
 			$html .= '  <tr>';
 			if ($numero != $value['numero']) {
 				$numero = $value['numero'];
-				$html .= '  <td style="border-top:1px solid black;" align="center"><b>' . $value['nombre'] . '</b></td>';
+				$html.='  <td style="border-bottom:0px;"><b>'.$value['nombre'].'</b></td>';
 				$fila = '1';
 			} else {
 				$html .= '  <td style="border-bottom:0px; border-top:0px;"></td>';
@@ -4693,7 +4780,7 @@ public function pdf_col_horario_get(){
     if ($fila === '') {
         $border = "border-bottom:0px; border-top:0px;";
     } else {
-        $border = "border-top:1px solid black;";
+        $border = "border-bottom:0px;";
     }
     if ($data != '') {
         $parts = explode('|', $data, 6);
